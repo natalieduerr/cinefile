@@ -1,0 +1,12 @@
+.nav {
+    height: 100vh;
+    background-color: black;
+
+    > .MuiGrid-item {
+        margin-left: 20%;
+    }
+
+    a {
+        font-size: 24px;
+    }
+}
