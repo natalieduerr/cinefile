@@ -51,12 +51,15 @@ CREATE TABLE debuted_at_festival (
     film INT REFERENCES film(id)
     	ON UPDATE CASCADE
 		ON DELETE CASCADE,
-    award INT REFERENCES festival(id)
+    festival INT REFERENCES festival(id)
     	ON UPDATE CASCADE
 		ON DELETE CASCADE);
     
 CREATE TABLE watched (
 	id INT PRIMARY KEY,
+    user VARCHAR(45) REFERENCES user(username)
+    	ON UPDATE CASCADE
+		ON DELETE CASCADE,
     date DATE NOT NULL,
     rating INT,
     film INT REFERENCES film(id)
@@ -64,3 +67,7 @@ CREATE TABLE watched (
 		ON DELETE CASCADE,
 	CHECK (rating = NULL or rating = 1 OR rating = 2 OR rating = 3 
 			OR rating = 4 OR rating = 5));
+            
+CREATE TABLE user (
+	username VARCHAR(45) NOT NULL,
+    password VARCHAR(45) NOT NULL);
