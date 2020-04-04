@@ -29,21 +29,35 @@ CREATE TABLE film (
     passes_bechdol BOOLEAN NOT NULL,
     runtime INT NOT NULL,
     rating INT NOT NULL,
-    director INT REFERENCES director(id),
-    genre INT REFERENCES genre(id));
+    director INT REFERENCES director(id)
+		ON UPDATE CASCADE
+		ON DELETE CASCADE,
+    genre INT REFERENCES genre(id)
+		ON UPDATE CASCADE
+		ON DELETE CASCADE);
 
 CREATE TABLE winner (
 	id INT PRIMARY KEY,
     year INT NOT NULL,
-    film INT REFERENCES film(id),
-    award INT REFERENCES award(id));
+    film INT REFERENCES film(id)
+		ON UPDATE CASCADE
+		ON DELETE CASCADE,
+    award INT REFERENCES award(id)
+		ON UPDATE CASCADE
+		ON DELETE CASCADE);
     
 CREATE TABLE debuted_at_festival (
 	id INT PRIMARY KEY,
-    film INT REFERENCES film(id),
-    award INT REFERENCES festival(id));
+    film INT REFERENCES film(id)
+    	ON UPDATE CASCADE
+		ON DELETE CASCADE,
+    award INT REFERENCES festival(id)
+    	ON UPDATE CASCADE
+		ON DELETE CASCADE);
     
 CREATE TABLE watched (
 	id INT PRIMARY KEY,
     date DATE NOT NULL,
-    film INT REFERENCES film(id));
+    film INT REFERENCES film(id)
+    	ON UPDATE CASCADE
+		ON DELETE CASCADE);
