@@ -1,14 +1,14 @@
 import React from 'react';
 import {Route, BrowserRouter as Router, Switch} from 'react-router-dom';
 
-import LogIn from './components/home/log-in';
-import Explore from './components/explore/Explore';
-import Account from './components/account/Account';
-import CreateFilm from './components/film/CreateFilm';
-import FilmDetail from './components/film/FilmDetail';
-import DirectorDetail from './components/festival/DirectorDetail';
-import FestivalDetail from './components/festival/FestivalDetail';
-import AwardDetail from './components/award/AwardDetail';
+import LogIn from "./components/home/log-in";
+import Explore from "./components/explore/Explore";
+import Account from "./components/account/Account";
+import CreateFilm from "./components/film/CreateFilm";
+import FilmDetail from "./components/film/FilmDetail";
+import DirectorDetail from "./components/director/DirectorDetail";
+import FestivalDetail from "./components/festival/FestivalDetail";
+import AwardDetail from "./components/award/AwardDetail";
 
 
 const Routes = props => {

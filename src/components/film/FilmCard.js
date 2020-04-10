@@ -22,7 +22,8 @@ export default class FilmCard extends React.Component {
 
   render() {
     return (
-      <Grid item>
+      <Grid item
+      xs={4}>
         <Card className={'film-card'}>
           <CardActionArea className={'film-card--action'}>
             <CardMedia className={'film-card--poster'}>
