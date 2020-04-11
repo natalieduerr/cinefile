@@ -1,3 +1,4 @@
+DROP DATABASE IF EXISTS films;
 CREATE DATABASE films;
 USE films;
 
