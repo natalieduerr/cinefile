@@ -1,0 +1,22 @@
+@import '../styles.scss';
+
+.log-in {
+    height: 100vh;
+    background-color: $background;
+
+    .MuiInputBase-root {
+        background-color: white !important;
+    }
+
+    .Mui-disabled {
+        background-color: $disabled !important;
+    }
+
+    p {
+        color: white;
+    }
+
+    .MuiGrid-grid-xs-6.intro {
+        display: inline-table;
+    }
+}

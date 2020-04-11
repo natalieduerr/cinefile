@@ -6,6 +6,9 @@ import { Link } from "react-router-dom";
 import Navigation from "../../components/navigation/Navigation";
 import FilmListing from "../../components/film/FilmListing";
 
+import FilmCard from "../../components/film/FilmCard";
+
+
 import "./explore.scss";
 
 export default class Dashboard extends React.Component {
@@ -22,9 +25,9 @@ export default class Dashboard extends React.Component {
                         <Grid item
                             xs={12}> 
                             <h1>All Films</h1>
+                            <FilmCard></FilmCard>
                         </Grid>
                         <FilmListing view={'all'}></FilmListing>
-                        {/* <FilmCard></FilmCard> */}
                     </Grid>
                 </Grid>
             </div>
