@@ -29,7 +29,7 @@ CREATE TABLE film (
     passes_bechdol BOOLEAN NOT NULL,
     runtime INT NOT NULL,
     rating VARCHAR(45),
-    photo VARCHAR(45) DEFAULT 'noPic.jpg',
+    photo VARCHAR(45) DEFAULT '/imgs/no_poster.jpg',
     director INT REFERENCES director(id)
 		ON UPDATE CASCADE
 		ON DELETE CASCADE,
