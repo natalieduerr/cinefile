@@ -6,7 +6,7 @@ DROP PROCEDURE IF EXISTS get_all_films;
 DELIMITER // 
 CREATE PROCEDURE get_all_films()
 BEGIN
-	SELECT id, name, date_released FROM film;
+	SELECT id, name, date_released, photo FROM film;
 END //
 
 -- fetching all the film festivals and their information given a film name
@@ -59,7 +59,7 @@ DELIMITER //
 CREATE PROCEDURE get_film_info(fid INT)
 BEGIN
 	SELECT film.id, film.name, film.date_released, film.passes_bechdol,
-		   film.runtime, film.rating, genre.name
+		   film.runtime, film.rating, genre.name, film.photo
 	FROM film
     INNER JOIN genre
     ON genre.id = film.genre

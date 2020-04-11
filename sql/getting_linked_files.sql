@@ -36,7 +36,7 @@ DROP PROCEDURE IF EXISTS get_film_for_award;
 DELIMITER // 
 CREATE PROCEDURE get_film_for_award(aid int)
 BEGIN
-	SELECT film.id, film.name, film.date_released
+	SELECT film.id, film.name, film.date_released, film.photo
     FROM film
     INNER JOIN winner
     ON winner.film = film.id
@@ -51,7 +51,7 @@ DROP PROCEDURE IF EXISTS get_film_for_director;
 DELIMITER // 
 CREATE PROCEDURE get_film_for_director(did int)
 BEGIN
-	SELECT film.id, film.name, film.date_released
+	SELECT film.id, film.name, film.date_released, film.photo
     FROM film
     WHERE film.director = did;
 END //
@@ -62,7 +62,7 @@ DROP PROCEDURE IF EXISTS get_film_for_film_festival;
 DELIMITER // 
 CREATE PROCEDURE get_film_for_film_festival(ffid int)
 BEGIN
-	SELECT film.id, film.name, film.date_released
+	SELECT film.id, film.name, film.date_released, film.photo
     FROM film
     INNER JOIN debuted_at_festival
     ON debuted_at_festival.film = film.id
