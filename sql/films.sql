@@ -4,6 +4,11 @@
 -- ------------------------------------------------------
 -- Server version	8.0.19
 
+DROP DATABASE IF EXISTS films;
+CREATE DATABASE films;
+USE films;
+
+
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
@@ -372,20 +377,20 @@ BEGIN
     DECLARE count_women INT;
     
     SELECT COUNT(distinct film.id) INTO count_movies 
-    FROM (SELECT film.id,watched.rate,watched.rating
+    FROM (SELECT film.id,watched.date,watched.rating
 		  FROM watched
 		  INNER JOIN film
 		  ON film.id = watched.film
-		  WHERE winner.user = uname) AS uwu;
+		  WHERE watched.user = uname) AS uwu;
     
     SELECT COUNT(distinct film.id) INTO count_women
-    FROM (SELECT film.id,watched.rate,watched.rating
+    FROM (SELECT film.id,watched.date,watched.rating
 		  FROM watched
 		  INNER JOIN film
 		  ON film.id = watched.film
           INNER JOIN director
           ON film.director = director.id
-		  WHERE winner.user = uname
+		  WHERE watched.user = uname
           AND director.gender = "woman") AS bc; 
 	
     RETURN (count_women / count_movies * 100);
@@ -449,7 +454,7 @@ DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `create_watched`(uname VARCHAR(45),fid INT,wdate DATE,wrate INT)
 BEGIN
 	INSERT INTO watched(user,date,rating,film)
-    VALUES ('uname','wdate',wrate,fid);
+    VALUES (uname,wdate,wrate,fid);
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -861,3 +866,10 @@ DELIMITER ;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2020-04-12 15:18:27
+
+CALL create_watched('natalie', 92, '2020-04-12', 4);
+
+SELECT * from watched;
+
+select films.women_directed_percent('natalie');
+
