@@ -7,20 +7,31 @@ import FilmCard from '../../components/film/FilmCard.js'
 
 import Navigation from "../../components/navigation/Navigation";
 
+var dateFormat = require('dateformat');
+
 export default class Dashboard extends React.Component {
     state = {
-        films: []
+        films: [],
+        director: []
     };
 
     componentDidMount() {
-        this.getFilm(this.props.id);
+        this.getFilms();
+        this.getDirector();
+        console.log(this.state.director);
     }
 
-    getFilms = id => {
-        fetch('http://localhost:5000/sitters')
-            // then filter
+    getFilms = _ => {
+        fetch(`http://localhost:5000/director/${this.props.location.state.directorId}/films`)
             .then(response => response.json())
-            .then(response => this.setState({ sitters: response.data }))
+            .then(response => this.setState({ films: response.data }))
+            .catch(err => console.error(err))
+    };
+
+    getDirector = _ => {
+        fetch(`http://localhost:5000/director/${this.props.location.state.directorId}/director`)
+            .then(response => response.json())
+            .then(response => this.setState({ director: response.data[0] }))
             .catch(err => console.error(err))
     };
 
@@ -28,29 +39,27 @@ export default class Dashboard extends React.Component {
         return (
             <div className="App">
                 <Grid container spacing={3}>
-                    <Navigation activeTab={'explore'} />
+                    <Navigation activeTab={''} />
                     <Grid container
                         xs={8}
                         spacing={3}
                         alignItems={'center'}>
                         <Grid item xs={12}>
-                            <h1>Director's Name here</h1>
-                        </Grid>
-                        <Grid item xs={4}>
-                            <h2>Birthdate:</h2> <h2>dob here</h2>
-                        </Grid>
-                        <Grid item xs={4}>
-                            {/* Going to need to convert M/F */}
-                            <h2>Gender:</h2> <h2>gender here</h2>
-                        </Grid>
-                        <Grid item xs={4}>
-                            <h2>Race:</h2> <h2>race here</h2>
+                            <h1>{this.state.director.name}</h1>
                         </Grid>
                         <Grid item xs={12}>
-                            {this.state.films.map(film => (
-                                <FilmCard film={film}/>
-                            ))}
+                            <p><b>Birthdate:</b> {dateFormat(this.state.director.birthdate, "longDate")}</p>
                         </Grid>
+                        <Grid item xs={12}>
+                            {/* Going to need to convert M/F */}
+                            <p><b>Gender:</b> {this.state.director.gender} </p>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <p><b>Race:</b> {this.state.director.race} </p>
+                        </Grid>
+                        {this.state.films.map(film => (
+                            <FilmCard key={film.id} film={film} />
+                        ))}
                     </Grid>
                 </Grid>
             </div>

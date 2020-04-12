@@ -4,14 +4,31 @@ import Button from '@material-ui/core/Button';
 import { Link } from "react-router-dom";
 
 import Navigation from "../../components/navigation/Navigation";
-import FilmListing from "../../components/film/FilmListing";
+// import FilmListing from "../../components/film/FilmListing";
 
 import FilmCard from "../../components/film/FilmCard";
-
 
 import "./explore.scss";
 
 export default class Dashboard extends React.Component {
+    state = {
+        films: [],
+    };
+
+    componentDidMount() {
+        this.getFilms();
+        console.log(this.state.films);
+    }
+
+    getFilms = _ => {
+        fetch('http://localhost:5000/film')
+            .then(response => response.json())
+            .then(response => this.setState({ films: response.data[0] }))
+            .catch(err => console.error(err))
+    };
+
+
+
     render() {
         return (
             <div className="App">
@@ -23,11 +40,12 @@ export default class Dashboard extends React.Component {
                         xs={8}
                         spacing={3}>
                         <Grid item
-                            xs={12}> 
+                            xs={12}>
                             <h1>All Films</h1>
-                            <FilmCard></FilmCard>
                         </Grid>
-                        <FilmListing view={'all'}></FilmListing>
+                        {this.state.films.map(film => (
+                            <FilmCard key={film.id} film={film} />
+                        ))}
                     </Grid>
                 </Grid>
             </div>
