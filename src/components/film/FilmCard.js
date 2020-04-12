@@ -10,8 +10,9 @@ import Grid from '@material-ui/core/Grid';
 import { Redirect } from "react-router-dom";
 
 // import {filmPoster} from "../../constants";
-import Poster from "./little-women.jpg";
 import './filmcard.scss'
+
+var dateFormat = require('dateformat');
 
 export default class FilmCard extends React.Component {
   state = {
@@ -34,11 +35,11 @@ export default class FilmCard extends React.Component {
           <Card className={'film-card'}>
             <CardActionArea className={'film-card--action'} onClick={() => this.setState({redirect: true})}>
               <CardMedia className={'film-card--poster'}>
-                <img src={`${this.props.film.photo}`} alt="Little Women"></img>
+                <img src={`${this.props.film.photo}`} alt={this.props.film.name}></img>
               </CardMedia>
               <CardContent className={'film-card--info'}>
                 <h2>{this.props.film.name}</h2>
-                {/* <h3>{this.props.film.date_released.substring(0, 4)}</h3> */}
+                <h3> {dateFormat(this.props.film.date_released, "longDate")}</h3>
               </CardContent>
             </CardActionArea>
           </Card>
