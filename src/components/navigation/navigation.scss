@@ -1,0 +1,21 @@
+.nav {
+    height: 100vh;
+    background-color: #232936;
+    position:fixed;
+
+    > .MuiGrid-item {
+        margin-left: 20%;
+    }
+
+    a {
+        font-size: 24px;
+        color: white;
+        text-decoration: none;
+    }
+
+    .active a{
+        color: turquoise;
+        text-decoration: underline;
+    }
+
+}
