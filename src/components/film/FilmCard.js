@@ -29,18 +29,16 @@ export default class FilmCard extends React.Component {
     else {
       return (
         <Grid item
-          xs={2}
-          m={3}
-          l={4}>
+          xs={6}
+          md={3}>
           <Card className={'film-card'}>
             <CardActionArea className={'film-card--action'} onClick={() => this.setState({redirect: true})}>
               <CardMedia className={'film-card--poster'}>
-                <img src={Poster} alt="Little Women"></img>
-                {/* {this.props.film.title}></img> */}
+                <img src={`${this.props.film.photo}`} alt="Little Women"></img>
               </CardMedia>
               <CardContent className={'film-card--info'}>
                 <h2>{this.props.film.name}</h2>
-                <h3>{this.props.film.date_released.substring(0, 4)}</h3>
+                {/* <h3>{this.props.film.date_released.substring(0, 4)}</h3> */}
               </CardContent>
             </CardActionArea>
           </Card>

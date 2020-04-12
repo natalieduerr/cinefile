@@ -17,14 +17,17 @@ export default class Dashboard extends React.Component {
 
     componentDidMount() {
         this.getFilms();
+        console.log(this.state.films);
     }
 
     getFilms = _ => {
         fetch('http://localhost:5000/film')
             .then(response => response.json())
-            .then(response => this.setState({ films: response.data }))
+            .then(response => this.setState({ films: response.data[0] }))
             .catch(err => console.error(err))
     };
+
+
 
     render() {
         return (

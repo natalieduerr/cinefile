@@ -16,27 +16,41 @@ con.connect(function (err) {
 
 });
 
-const get_film_info = `SELECT film.id, film.name, film.date_released, film.passes_bechdol,
-film.runtime, film.rating, genre.name
-FROM film
-INNER JOIN genre
-ON genre.id = film.genre
-WHERE film.id = 1;`;
+// const get_film_info = `SELECT film.id, film.name, film.date_released, film.passes_bechdol,
+// film.runtime, film.rating, genre.name
+// FROM film
+// INNER JOIN genre
+// ON genre.id = film.genre
+// WHERE film.id = 1;`;
 
 
-con.query(get_film_info, function (err, rows, fields) {
-  if (err) throw err;
+// con.query(get_film_info, function (err, rows, fields) {
+//   if (err) throw err;
 
-  for (var i in rows) {
-    console.log(rows[i]);
-  }
-});
+//   for (var i in rows) {
+//     console.log(rows[i]);
+//   }
+// });
 
 app.use(cors());
 
 // Films
+// app.get("/film", (req, res) => {
+//   var get_all_films = `SELECT id, name, date_released, photo FROM film;`;
+
+//   con.query(get_all_films, (err, results) => {
+//     if (err) {
+//       return res.send(err)
+//     } else {
+//       return res.json({
+//         data: results
+//       })
+//     }
+//   })
+// });
+
 app.get("/film", (req, res) => {
-  var get_all_films = `SELECT id, name, date_released, photo FROM film;`;
+  var get_all_films = `CALL get_all_films()`;
 
   con.query(get_all_films, (err, results) => {
     if (err) {
@@ -51,8 +65,8 @@ app.get("/film", (req, res) => {
 
 app.get("/film/:id/info", function (req, res) {
   const id = req.params.id;
-  const get_film_info = `SELECT film.id, film.name, film.date_released, film.passes_bechdol,
-  film.runtime, film.rating, genre.name
+  const get_film_info = `SELECT film.id, film.name AS name, film.date_released, film.passes_bechdol,
+  film.runtime, film.rating, film.photo, genre.name AS genre
 FROM film
 INNER JOIN genre
 ON genre.id = film.genre
@@ -133,7 +147,7 @@ app.get("/film/:id/awards", function (req, res) {
 // Awards
 app.get("/award/:id/films", function (req, res) {
   const id = req.params.id;
-  const get_awards = `SELECT film.id, film.name, film.date_released
+  const get_awards = `SELECT film.id, film.name, film.date_released, film.photo
   FROM film
   INNER JOIN winner
   ON winner.film = film.id
@@ -171,7 +185,7 @@ app.get("/award/:id/award", function (req, res) {
 // Festivals
 app.get("/festival/:id/films", function (req, res) {
   const id = req.params.id;
-  const get_awards = `SELECT film.id, film.name, film.date_released
+  const get_awards = `SELECT film.id, film.name, film.date_released, film.photo
   FROM film
   INNER JOIN debuted_at_festival
   ON debuted_at_festival.film = film.id
@@ -194,6 +208,41 @@ app.get("/festival/:id/festival", function (req, res) {
   const id = req.params.id;
   const get_info = `SELECT * FROM film_festival
   WHERE film_festival.id = ${id};`;
+
+  con.query(get_info, (err, results) => {
+    if (err) {
+      return res.send(err)
+    } else {
+      return res.json({
+        data: results
+      })
+    }
+  })
+});
+
+// Director
+app.get("/director/:id/films", function (req, res) {
+  const id = req.params.id;
+  const get_info = `SELECT film.id, film.name, film.date_released, film.photo
+  FROM film
+  WHERE film.director = ${id};`;
+
+  con.query(get_info, (err, results) => {
+    if (err) {
+      return res.send(err)
+    } else {
+      return res.json({
+        data: results
+      })
+    }
+  })
+});
+
+app.get("/director/:id/director", function (req, res) {
+  const id = req.params.id;
+  const get_info = `SELECT *
+  FROM director
+  WHERE director.id = ${id};`;
 
   con.query(get_info, (err, results) => {
     if (err) {
