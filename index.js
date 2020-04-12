@@ -255,6 +255,57 @@ app.get("/director/:id/director", function (req, res) {
   })
 });
 
+// Watched
+
+// app.get("/watched/create", (req, res) => {
+//   const {user_id, name, date, rating} = req.query;
+//   const create_watched = `CALL create_watched(?, ?, ?, ?)`;
+
+//   con.query(create_watched, {user_id}, {name}, {date}, {rating}, (err, results) => {
+//     if (err) {
+//       return res.send(err)
+//     } else {
+//       return res.json({
+//         message: 'Successfully created watched.',
+//         data: results
+//       })
+//     }
+//   })
+// });
+
+app.get("/watched/create", (req, res) => {
+  const { user_id, name, date, rating } = req.query;
+  const create_watched = `INSERT INTO watched(user, date, rating, film)
+  VALUES ('${user_id}','${date}',${rating},${name});`;
+
+  con.query(create_watched, (err, results) => {
+    if (err) {
+      return res.send(err)
+    } else {
+      return res.json({
+        message: 'Successfully created watched.',
+        data: results
+      })
+    }
+  })
+});
+
+
+app.get("/watched/:id", function (req, res) {
+  const id = req.params.id;
+  const get_watched = `CALL get_watched('${id}');`;
+
+  con.query(get_watched, (err, results) => {
+    if (err) {
+      return res.send(err)
+    } else {
+      return res.json({
+        data: results
+      })
+    }
+  })
+});
+
 
 
 app.listen(5000, () => {

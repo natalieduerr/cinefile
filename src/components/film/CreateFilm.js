@@ -158,7 +158,8 @@ export default class Dashboard extends React.Component {
                                         />
                                     </FormGroup>
                                 </FormControl>
-
+                                <Button color={'primary'} variant={'contained'} type={'button'}
+                                            onClick={this.handleSubmit}>Submit</Button>
                             </form>
                         </Grid>
                     </Grid>

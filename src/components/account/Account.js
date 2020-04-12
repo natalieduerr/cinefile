@@ -19,6 +19,7 @@ var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 export default class Account extends React.Component {
     state = {
+        watcheds: [],
         redirect: false
     };
 
@@ -26,12 +27,21 @@ export default class Account extends React.Component {
         localStorage.setItem('username', '');
     };
 
+    getWatched = _ => {
+        fetch(`http://localhost:5000/watched/${localStorage.getItem('username')}`)
+            .then(response => response.json())
+            .then(response => this.setState({ watcheds: response.data[0] }))
+            .catch(err => console.error(err))
+    };
+
+
+    componentDidMount() {
+        this.getWatched();
+        console.log(this.state.watcheds);
+    }
+
     render() {
         console.log(localStorage.getItem('username'));
-
-        // localStorage.setItem('username', '');
-
-        // console.log(localStorage.getItem('username'));
 
         if ((localStorage.getItem('username') === "")) {
             this.setState({ redirect: true });
@@ -121,7 +131,7 @@ export default class Account extends React.Component {
                                     <h1>Account Details</h1>
                                 </Grid>
                                 <Grid item xs={4} spacing={3}>
-                                    <Button variant="contained" color="primary" onClick={() => { this.backHome(); this.setState({redirect: true})}}>
+                                    <Button variant="contained" color="primary" onClick={() => { this.backHome(); this.setState({ redirect: true }) }}>
                                         Log-out
                                     </Button>
                                 </Grid>
@@ -142,7 +152,9 @@ export default class Account extends React.Component {
                             </Grid>
                             <Grid container xs={12}>
                                 <h2 className="watched">Watched films</h2>
-                                <WatchedCard></WatchedCard>
+                                {this.state.watcheds.map(watched => (
+                                    <WatchedCard key={watched.id} watched={watched} />
+                                ))}
                             </Grid>
                             <Button variant="contained" color="primary">
                                 Delete account

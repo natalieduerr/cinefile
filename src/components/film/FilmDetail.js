@@ -9,6 +9,7 @@ import AwardCard from "../../components/award/AwardCard";
 
 import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem/MenuItem";
+import Button from '@material-ui/core/Button';
 
 import WatchedCard from "../../components/film/WatchedCard"
 
@@ -34,6 +35,17 @@ export default class FilmDetail extends React.Component {
     this.getFestivals();
     this.getAwards()
   }
+
+  createWatched = () => {
+    fetch(`http://localhost:5000/watched/create?user_id=${localStorage.getItem('username')}&name=${this.state.filmDetails.id}&date=${this.state.watchedDate}&rating=${this.state.rating}`)
+      .then(response => response.json())
+      .then(response => {
+        console.log(response);
+        // Success message, clear state for date and rating
+        // this.setState({redirect: true});
+      })
+      .catch(err => console.error(err))
+  };
 
   handleChange = name => event => {
     this.setState({ [name]: event.target.value });
@@ -208,6 +220,8 @@ export default class FilmDetail extends React.Component {
                   </Grid>
                 )
               }
+              <Button color={'primary'} variant={'contained'} type={'button'}
+                onClick={this.handleSubmit}>+ Add Watched</Button>
             </Grid>
           </Grid>
         </div>
