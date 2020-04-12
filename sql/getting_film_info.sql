@@ -6,7 +6,8 @@ DROP PROCEDURE IF EXISTS get_all_films;
 DELIMITER // 
 CREATE PROCEDURE get_all_films()
 BEGIN
-	SELECT film.id, film.name, film.date_released, film.photo FROM film;
+	SELECT film.id, film.name, film.date_released, film.photo FROM film
+    ORDER BY date_released DESC;
 END //
 
 -- fetching all the film festivals and their information given a film name
