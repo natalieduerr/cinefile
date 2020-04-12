@@ -31,29 +31,35 @@ CREATE TABLE film (
     runtime INT NOT NULL,
     rating VARCHAR(45),
     photo VARCHAR(45) DEFAULT '/imgs/no_poster.jpg',
-    director INT REFERENCES director(id)
+    director INT NOT NULL,
+    genre INT NOT NULL,
+    CONSTRAINT FOREIGN KEY (director) REFERENCES director(id)
 		ON UPDATE CASCADE
 		ON DELETE CASCADE,
-    genre INT REFERENCES genre(id)
+    CONSTRAINT FOREIGN KEY (genre) REFERENCES genre(id)
 		ON UPDATE CASCADE
 		ON DELETE CASCADE);
 
 CREATE TABLE winner (
 	id INT PRIMARY KEY AUTO_INCREMENT,
     year INT NOT NULL,
-    film INT REFERENCES film(id)
+    film INT NOT NULL,
+    award INT NOT NULL,
+    CONSTRAINT FOREIGN KEY (film) REFERENCES film(id)
 		ON UPDATE CASCADE
 		ON DELETE CASCADE,
-    award INT REFERENCES award(id)
+    CONSTRAINT FOREIGN KEY (award) REFERENCES award(id)
 		ON UPDATE CASCADE
 		ON DELETE CASCADE);
     
 CREATE TABLE debuted_at_festival (
 	id INT PRIMARY KEY AUTO_INCREMENT,
-    film INT REFERENCES film(id)
+    film INT NOT NULL,
+    festival INT NOT NULL,
+    CONSTRAINT FOREIGN KEY (film) REFERENCES film(id)
     	ON UPDATE CASCADE
 		ON DELETE CASCADE,
-    festival INT REFERENCES festival(id)
+    CONSTRAINT FOREIGN KEY (festival) REFERENCES film_festival(id)
     	ON UPDATE CASCADE
 		ON DELETE CASCADE);
     
@@ -62,9 +68,9 @@ CREATE TABLE watched (
     user VARCHAR(45) NOT NULL,
     date DATE NOT NULL,
     rating INT,
-    film INT REFERENCES film(id)
+    film INT NOT NULL,
+    CONSTRAINT FOREIGN KEY (film) REFERENCES film(id)
     	ON UPDATE CASCADE
 		ON DELETE CASCADE,
 	CHECK (rating = NULL or rating = 1 OR rating = 2 OR rating = 3 
 			OR rating = 4 OR rating = 5));
-            

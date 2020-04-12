@@ -8,11 +8,11 @@ DROP PROCEDURE IF EXISTS get_watched;
 DELIMITER // 
 CREATE PROCEDURE get_watched(uname VARCHAR(45))
 BEGIN
-	SELECT film.name,watched.rate,watched.rating
+	SELECT film.name, watched.date, watched.rating
     FROM watched
     INNER JOIN film
     ON film.id = watched.film
-    WHERE winner.user = uname;
+    WHERE watched.user = uname;
 END //
 
 -- gets the integer percentage of distinct movies watched that pass BCD
