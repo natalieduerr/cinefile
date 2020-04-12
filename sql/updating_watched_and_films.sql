@@ -89,3 +89,23 @@ BEGIN
 	SELECT director.id, director.name
     FROM director;
 END //
+
+-- gets all the film festival names and their ids
+DROP PROCEDURE IF EXISTS get_film_festivals;
+
+DELIMITER // 
+CREATE PROCEDURE get_film_festivals()
+BEGIN
+	SELECT film_festivals.id, film_festivals.name
+    FROM film_festivals;
+END //
+
+-- adds a debuted at film festival for a film festival and a film
+DROP PROCEDURE IF EXISTS add_festival_for_film;
+
+DELIMITER // 
+CREATE PROCEDURE add_festival_for_film(ffid INT,filmid INT)
+BEGIN
+	INSERT INTO debuted_at_festival(film,festival)
+    VALUES (filmid,ffid);
+END //
