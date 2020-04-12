@@ -6,7 +6,20 @@ CREATE PROCEDURE create_watched(uname VARCHAR(45),fid INT,wdate DATE,wrate INT)
 
 BEGIN
 	INSERT INTO watched(user,date,rating,film)
-    VALUES (uname,wdate,wrate,fid);
+    VALUES ('uname','wdate',wrate,fid);
+END //
+
+-- selects a watched tuples for a given film from a user
+DROP PROCEDURE IF EXISTS user_has_watched_film;
+
+DELIMITER //
+CREATE PROCEDURE user_has_watched_film(uname VARCHAR(45),fid INT)
+
+BEGIN
+	SELECT film.name, watched.date, watched.rating
+    FROM watched
+    WHERE watched.user = uname
+    AND watched.film = fid;
 END //
 
 -- updates a new watched tuple
@@ -17,8 +30,8 @@ CREATE PROCEDURE update_watched(wid INT,wdate DATE,wrate INT)
 
 BEGIN
 	UPDATE watched
-    SET date=wdate
-    AND rate=wrate
+    SET date= 'wdate'
+    AND rate= wrate
     WHERE id = wid;
 END //
 
@@ -42,7 +55,7 @@ CREATE PROCEDURE create_film(fn VARCHAR(200), fdr DATE, fpb BOOLEAN, fru INT,
 
 BEGIN
 	INSERT INTO film(name,date_released,passes_bechdol,runtime,rating,photo,director,genre)
-    VALUES (fn,fdr,fpb,fru,fra,fp,fd,fg);
+    VALUES ('fn','fdr',fpb,fru,'fra','fp',fd,fg);
 END //
 
 -- returns true if there exists a film with the given name and release date

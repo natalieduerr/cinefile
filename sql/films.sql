@@ -19,11 +19,6 @@
 -- Table structure for table `award`
 --
 
-
-DROP DATABASE IF EXISTS films;
-CREATE DATABASE films;
-USE films;
-
 DROP TABLE IF EXISTS `award`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -53,9 +48,13 @@ DROP TABLE IF EXISTS `debuted_at_festival`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `debuted_at_festival` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `film` int DEFAULT NULL,
-  `festival` int DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `film` int NOT NULL,
+  `festival` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `film` (`film`),
+  KEY `festival` (`festival`),
+  CONSTRAINT `debuted_at_festival_ibfk_1` FOREIGN KEY (`film`) REFERENCES `film` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `debuted_at_festival_ibfk_2` FOREIGN KEY (`festival`) REFERENCES `film_festival` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -110,10 +109,14 @@ CREATE TABLE `film` (
   `passes_bechdol` tinyint(1) NOT NULL,
   `runtime` int NOT NULL,
   `rating` varchar(45) DEFAULT NULL,
-  `photo` varchar(45) DEFAULT 'noPic.jpg',
-  `director` int DEFAULT NULL,
-  `genre` int DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `photo` varchar(45) DEFAULT '/imgs/no_poster.jpg',
+  `director` int NOT NULL,
+  `genre` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `director` (`director`),
+  KEY `genre` (`genre`),
+  CONSTRAINT `film_ibfk_1` FOREIGN KEY (`director`) REFERENCES `director` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `film_ibfk_2` FOREIGN KEY (`genre`) REFERENCES `genre` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -189,8 +192,10 @@ CREATE TABLE `watched` (
   `user` varchar(45) NOT NULL,
   `date` date NOT NULL,
   `rating` int DEFAULT NULL,
-  `film` int DEFAULT NULL,
+  `film` int NOT NULL,
   PRIMARY KEY (`id`),
+  KEY `film` (`film`),
+  CONSTRAINT `watched_ibfk_1` FOREIGN KEY (`film`) REFERENCES `film` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `watched_chk_1` CHECK (((`rating` = NULL) or (`rating` = 1) or (`rating` = 2) or (`rating` = 3) or (`rating` = 4) or (`rating` = 5)))
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -215,9 +220,13 @@ DROP TABLE IF EXISTS `winner`;
 CREATE TABLE `winner` (
   `id` int NOT NULL AUTO_INCREMENT,
   `year` int NOT NULL,
-  `film` int DEFAULT NULL,
-  `award` int DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `film` int NOT NULL,
+  `award` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `film` (`film`),
+  KEY `award` (`award`),
+  CONSTRAINT `winner_ibfk_1` FOREIGN KEY (`film`) REFERENCES `film` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `winner_ibfk_2` FOREIGN KEY (`award`) REFERENCES `award` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=96 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -386,7 +395,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-
 /*!50003 DROP PROCEDURE IF EXISTS `add_festival_for_film` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -407,7 +415,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-
 /*!50003 DROP PROCEDURE IF EXISTS `create_film` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -422,7 +429,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `create_film`(fn VARCHAR(200), fdr D
 							 fra VARCHAR(45), fp VARCHAR(45), fd INT, fg INT)
 BEGIN
 	INSERT INTO film(name,date_released,passes_bechdol,runtime,rating,photo,director,genre)
-    VALUES (fn,fdr,fpb,fru,fra,fp,fd,fg);
+    VALUES ('fn','fdr',fpb,fru,'fra','fp',fd,fg);
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -442,7 +449,7 @@ DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `create_watched`(uname VARCHAR(45),fid INT,wdate DATE,wrate INT)
 BEGIN
 	INSERT INTO watched(user,date,rating,film)
-    VALUES (uname,wdate,wrate,fid);
+    VALUES ('uname','wdate',wrate,fid);
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -479,12 +486,10 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_all_films`()
 BEGIN
 	SELECT film.id, film.name, film.date_released, film.photo FROM film
     ORDER BY date_released DESC;
-
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -624,7 +629,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-
 /*!50003 DROP PROCEDURE IF EXISTS `get_film_festivals` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -645,7 +649,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-
 /*!50003 DROP PROCEDURE IF EXISTS `get_film_festival_data` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -679,7 +682,6 @@ DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_film_for_award`(aid int)
 BEGIN
 	SELECT film.id, film.name, film.date_released, film.photo
-
     FROM film
     INNER JOIN winner
     ON winner.film = film.id
@@ -705,7 +707,6 @@ DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_film_for_director`(did int)
 BEGIN
 	SELECT film.id, film.name, film.date_released, film.photo
-
     FROM film
     WHERE film.director = did;
 END ;;
@@ -751,7 +752,7 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_film_info`(fid INT)
 BEGIN
-	SELECT film.id, film.name AS name, film.date_released, film.passes_bechdol,
+	SELECT film.id, film.name, film.date_released, film.passes_bechdol,
 		   film.runtime, film.rating, genre.name as genre, film.photo
 	FROM film
     INNER JOIN genre
@@ -794,11 +795,11 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_watched`(uname VARCHAR(45))
 BEGIN
-	SELECT film.name,watched.rate,watched.rating
+	SELECT film.name, watched.date, watched.rating
     FROM watched
     INNER JOIN film
     ON film.id = watched.film
-    WHERE winner.user = uname;
+    WHERE watched.user = uname;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -818,9 +819,31 @@ DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `update_watched`(wid INT,wdate DATE,wrate INT)
 BEGIN
 	UPDATE watched
-    SET date=wdate
-    AND rate=wrate
+    SET date= 'wdate'
+    AND rate= wrate
     WHERE id = wid;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 DROP PROCEDURE IF EXISTS `user_has_watched_film` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `user_has_watched_film`(uname VARCHAR(45),fid INT)
+BEGIN
+	SELECT film.name, watched.date, watched.rating
+    FROM watched
+    WHERE watched.user = uname
+    AND watched.film = fid;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -836,3 +859,5 @@ DELIMITER ;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2020-04-12 15:18:27
