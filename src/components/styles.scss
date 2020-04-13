@@ -16,3 +16,22 @@ $bold: 700;
 a {
     text-decoration: none;
 }
+
+.sucess-pop-up, .fail-pop-up {
+    padding: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: .5rem;
+    z-index: 9999999;
+    position: fixed;
+    bottom: 40px;
+    color: white;
+}
+
+.success-pop-up {
+    background-color: green;
+}
+
+.fail-pop-up {
+    background-color: red;
+}

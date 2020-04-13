@@ -43,44 +43,42 @@ export default class Account extends React.Component {
 
     getCountWatched = _ => {
         fetch(`http://localhost:5000/watched/${localStorage.getItem('username')}/count`)
-        .then(response => response.json())
-            .then(response => this.setState({ countWatched: response.data[0]["count_watched('"+localStorage.getItem('username')+"')"]}))
+            .then(response => response.json())
+            .then(response => this.setState({ countWatched: response.data[0]["count_watched('" + localStorage.getItem('username') + "')"] }))
             .catch(err => console.error(err))
     };
 
     getWomenDirected = _ => {
         fetch(`http://localhost:5000/watched/${localStorage.getItem('username')}/women`)
-        .then(response => response.json())
-            .then(response => this.setState({ women: response.data[0]["women_directed('"+localStorage.getItem('username')+"')"]}))
+            .then(response => response.json())
+            .then(response => this.setState({ women: response.data[0]["women_directed('" + localStorage.getItem('username') + "')"] }))
             .catch(err => console.error(err))
     };
 
     getBechdol = _ => {
         fetch(`http://localhost:5000/watched/${localStorage.getItem('username')}/bechdol`)
-        .then(response => response.json())
-            .then(response => this.setState({ bechdol: response.data[0]["BCD_percent('"+localStorage.getItem('username')+"')"]}))
+            .then(response => response.json())
+            .then(response => this.setState({ bechdol: response.data[0]["BCD_percent('" + localStorage.getItem('username') + "')"] }))
             .catch(err => console.error(err))
     };
 
     get = name => {
         fetch(`http://localhost:5000/watched/${localStorage.getItem('username')}/${name}`)
-        .then(response => response.json())
-            .then(response => this.setState({ ["rating"+[name]]: response.data[0]["rating_percentage('"+localStorage.getItem('username')+"', "+name+")"]}))
+            .then(response => response.json())
+            .then(response => this.setState({ ["rating" + [name]]: response.data[0]["rating_percentage('" + localStorage.getItem('username') + "', " + name + ")"] }))
             .catch(err => console.error(err))
     }
-
-
 
     componentDidMount() {
         this.getWatched();
         this.getWomenDirected();
         this.getCountWatched();
         this.getBechdol();
-        this.get(1);    
-        this.get(2);    
-        this.get(3);    
-        this.get(4);    
-        this.get(5);    
+        this.get(1);
+        this.get(2);
+        this.get(3);
+        this.get(4);
+        this.get(5);
     }
 
     render() {
@@ -107,7 +105,7 @@ export default class Account extends React.Component {
                     type: "pie",
                     dataPoints: [
                         { y: [this.state.women], label: "By women", color: "#6157A6" },
-                        { y: [this.state.countWatched]-[this.state.women], label: "Not by women", color: "#40e0d0" }
+                        { y: [this.state.countWatched] - [this.state.women], label: "Not by women", color: "#40e0d0" }
                     ]
                 }]
             }
@@ -117,14 +115,14 @@ export default class Account extends React.Component {
                 title: {
                     fontWeight: "bold",
                     fontSize: 18,
-                    text: "Watched films that pass the Bechdol Test"
+                    text: "Watched films that pass the Bechdel Test"
                 },
                 data: [{
                     indexLabelFontFamily: 'Work Sans',
                     type: "pie",
                     dataPoints: [
                         { y: [this.state.bechdol], label: "Pass", color: "#40e0d0" },
-                        { y: [this.state.countWatched]-[this.state.bechdol], label: "Does not pass", color: "#FEEA19" }
+                        { y: [this.state.countWatched] - [this.state.bechdol], label: "Does not pass", color: "#FEEA19" }
                     ]
                 }]
             }
@@ -171,33 +169,42 @@ export default class Account extends React.Component {
                                 <Grid item xs={8}>
                                     <h1>Account Details</h1>
                                 </Grid>
-                                <Grid item xs={4} spacing={3}>
+                                <Grid container justify={"flex-end"} xs={4} spacing={3}>
                                     <Button variant="contained" color="primary" onClick={() => { this.backHome(); this.setState({ redirect: true }) }}>
                                         Log-out
                                     </Button>
                                 </Grid>
                             </Grid>
-                            <Grid item xs={12}>
-                                <h2>Data Visualizations</h2>
-                            </Grid>
-                            <Grid container xs={12}>
-                                <Grid item xs={4}>
-                                    <CanvasJSChart options={womenDirector} />
+                            <h2>Data Visualizations</h2>
+                            {(this.state.watcheds.length !== 0) ?
+                                <Grid container xs={12}>
+                                    <Grid item xs={4}>
+                                        <CanvasJSChart options={womenDirector} />
+                                    </Grid>
+                                    <Grid item xs={4}>
+                                        <CanvasJSChart options={bechdolTest} />
+                                    </Grid>
+                                    <Grid item xs={4}>
+                                        <CanvasJSChart options={ratings} />
+                                    </Grid>
+                                </Grid> :
+                                <Grid container xs={12}>
+                                    <Grid item xs={12}><h4>Watch some films and we'll analyze your data!</h4></Grid>
                                 </Grid>
-                                <Grid item xs={4}>
-                                    <CanvasJSChart options={bechdolTest} />
+                            }
+                            {(this.state.watcheds.length !== 0) ?
+                                <Grid container xs={12}>
+                                    <h2 className="watched">Watched films</h2>
+                                    {this.state.watcheds.map(watched => (
+                                        <WatchedCard key={watched.id} watched={watched} />
+                                    ))}
+                                </Grid> :
+                                <Grid container xs={12}>
+                                    <Grid item xs={12}><h2 className="watched">Watched films</h2></Grid>
+                                    <Grid item xs={12}><h4>You haven't watched any films yet!</h4></Grid>
                                 </Grid>
-                                <Grid item xs={4}>
-                                    <CanvasJSChart options={ratings} />
-                                </Grid>
-                            </Grid>
-                            <Grid container xs={12}>
-                                <h2 className="watched">Watched films</h2>
-                                {this.state.watcheds.map(watched => (
-                                    <WatchedCard key={watched.id} watched={watched} />
-                                ))}
-                            </Grid>
-                            <Button variant="contained" color="primary">
+                            }
+                            <Button className="delete" variant="contained" color="primary">
                                 Delete account
                             </Button>
                         </Grid>

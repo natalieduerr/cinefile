@@ -87,7 +87,7 @@ CREATE TABLE `director` (
   `gender` varchar(45) NOT NULL,
   `race` varchar(45) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -96,7 +96,7 @@ CREATE TABLE `director` (
 
 LOCK TABLES `director` WRITE;
 /*!40000 ALTER TABLE `director` DISABLE KEYS */;
-INSERT INTO `director` VALUES (1,'William A. Wellman','1896-02-29','M','White'),(2,'Harry Beaumont','1888-02-10','M','White'),(3,'Lewis Milestone','1895-09-30','M','White'),(4,'Wesley Ruggles','1889-06-11','M','White'),(5,'Edmund Goulding','1891-03-20','M','White'),(6,'Frank Lloyd','1886-02-02','M','White'),(7,'Frank Capra','1897-05-18','M','White'),(8,'Robert Z. Leonard','1889-10-07','M','White'),(9,'William Dieterle','1893-07-15','M','White'),(10,'Victor Fleming','1889-02-23','M','White'),(11,'Alfred Hitchcock','1899-08-13','M','White'),(12,'John Ford','1894-02-01','M','White'),(13,'William Wyler','1902-07-01','M','White'),(14,'Michael Curtiz','1886-12-24','M','White'),(15,'Leo McCarey','1898-10-03','M','White'),(16,'Billy Wilder','1906-06-22','M','White'),(17,'Elia Kazan','1909-09-07','M','White'),(18,'Laurence Olivier','1907-05-22','M','White'),(19,'Robert Rossen','1908-03-16','M','White'),(20,'Joseph L. Mankiewicz','1909-02-11','M','White'),(21,'Vincente Minnelli','1903-02-28','M','White'),(22,'Cecil B. DeMille','1881-08-12','M','White'),(23,'Fred Zinnemann','1907-04-29','M','White'),(24,'Delbert Mann','1920-01-30','M','White'),(25,'Michael Anderson','1920-01-30','M','White'),(26,'David Lean','1908-03-25','M','White'),(27,'Robert Wise','1914-09-10','M','White'),(28,'Tony Richardson','1928-06-05','M','White'),(29,'George Cukor','1899-07-07','M','White'),(30,'Norman Jewison','1926-07-21','M','White'),(31,'Carol Reed','1906-12-30','M','White'),(32,'John Schlesinger','1926-02-16','M','White'),(33,'Franklin J. Schaffner','1920-05-30','M','White'),(34,'William Friedkin','1935-08-29','M','White'),(35,'Francis Ford Coppola','1939-04-07','M','White'),(36,'George Roy Hill','1921-12-20','M','White'),(37,'Miloš Forman','1932-02-18','M','White'),(38,'John G. Avildsen','1935-12-21','M','White'),(39,'Woody Allen','1935-12-01','M','White'),(40,'Michael Cimino','1939-02-03','M','White'),(41,'Robert Benton','1932-09-29','M','White'),(42,'Robert Redford','1936-08-18','M','White'),(43,'Hugh Hudson','1936-08-25','M','White'),(44,'Richard Attenborough','1923-08-29','M','White'),(45,'James L. Brooks','1940-05-09','M','White'),(46,'Sydney Pollack','1934-07-01','M','White'),(47,'Oliver Stone','1946-09-15','M','White'),(48,'Bernardo Bertolucci','1941-03-16','M','White'),(49,'Barry Levinson','1942-04-06','M','White'),(50,'Bruce Beresford','1940-08-16','M','White'),(51,'Kevin Costner','1955-01-18','M','White'),(52,'Jonathan Demme','1944-02-22','M','White'),(53,'Clint Eastwood','1930-05-31','M','White'),(54,'Steven Spielberg','1946-12-18','M','White'),(55,'Robert Zemeckis','1952-05-14','M','White'),(56,'Mel Gibson','1956-01-03','M','White'),(57,'Anthony Minghella','1954-01-06','M','White'),(58,'James Cameron','1954-08-16','M','White'),(59,'John Madden','1949-04-08','M','White'),(60,'Sam Mendes','1965-08-01','M','White'),(61,'Ridley Scott','1937-11-30','M','White'),(62,'Ron Howard','1954-03-01','M','White'),(63,'Rob Marshall','1960-10-17','M','White'),(64,'Peter Jackson','1961-10-31','M','White'),(65,'Paul Haggis','1953-03-10','M','White'),(66,'Martin Scorsese','1942-11-17','M','White'),(67,'Joel Coen','1954-11-29','M','White'),(68,'Danny Boyle','1956-10-20','M','White'),(69,'Kathryn Bigelow','1951-11-27','F','White'),(70,'Tom Hooper','1972-10-05','M','White'),(71,'Michel Hazanavicius','1967-03-29','M','White'),(72,'Ben Affleck','1972-08-15','M','White'),(73,'Steve McQueen','1969-10-09','M','Black'),(74,'Alejandro Iñárritu','1963-08-15','M','White'),(75,'Tom McCarthy','1966-06-07','M','White'),(76,'Barry Jenkins','1979-11-19','M','Black'),(77,'Guillermo del Toro','1964-10-09','M','White'),(78,'Peter Farrelly','1956-12-17','M','White'),(79,'Bong Joon-ho','1969-09-14','M','Asian');
+INSERT INTO `director` VALUES (1,'William A. Wellman','1896-02-29','M','White'),(2,'Harry Beaumont','1888-02-10','M','White'),(3,'Lewis Milestone','1895-09-30','M','White'),(4,'Wesley Ruggles','1889-06-11','M','White'),(5,'Edmund Goulding','1891-03-20','M','White'),(6,'Frank Lloyd','1886-02-02','M','White'),(7,'Frank Capra','1897-05-18','M','White'),(8,'Robert Z. Leonard','1889-10-07','M','White'),(9,'William Dieterle','1893-07-15','M','White'),(10,'Victor Fleming','1889-02-23','M','White'),(11,'Alfred Hitchcock','1899-08-13','M','White'),(12,'John Ford','1894-02-01','M','White'),(13,'William Wyler','1902-07-01','M','White'),(14,'Michael Curtiz','1886-12-24','M','White'),(15,'Leo McCarey','1898-10-03','M','White'),(16,'Billy Wilder','1906-06-22','M','White'),(17,'Elia Kazan','1909-09-07','M','White'),(18,'Laurence Olivier','1907-05-22','M','White'),(19,'Robert Rossen','1908-03-16','M','White'),(20,'Joseph L. Mankiewicz','1909-02-11','M','White'),(21,'Vincente Minnelli','1903-02-28','M','White'),(22,'Cecil B. DeMille','1881-08-12','M','White'),(23,'Fred Zinnemann','1907-04-29','M','White'),(24,'Delbert Mann','1920-01-30','M','White'),(25,'Michael Anderson','1920-01-30','M','White'),(26,'David Lean','1908-03-25','M','White'),(27,'Robert Wise','1914-09-10','M','White'),(28,'Tony Richardson','1928-06-05','M','White'),(29,'George Cukor','1899-07-07','M','White'),(30,'Norman Jewison','1926-07-21','M','White'),(31,'Carol Reed','1906-12-30','M','White'),(32,'John Schlesinger','1926-02-16','M','White'),(33,'Franklin J. Schaffner','1920-05-30','M','White'),(34,'William Friedkin','1935-08-29','M','White'),(35,'Francis Ford Coppola','1939-04-07','M','White'),(36,'George Roy Hill','1921-12-20','M','White'),(37,'Miloš Forman','1932-02-18','M','White'),(38,'John G. Avildsen','1935-12-21','M','White'),(39,'Woody Allen','1935-12-01','M','White'),(40,'Michael Cimino','1939-02-03','M','White'),(41,'Robert Benton','1932-09-29','M','White'),(42,'Robert Redford','1936-08-18','M','White'),(43,'Hugh Hudson','1936-08-25','M','White'),(44,'Richard Attenborough','1923-08-29','M','White'),(45,'James L. Brooks','1940-05-09','M','White'),(46,'Sydney Pollack','1934-07-01','M','White'),(47,'Oliver Stone','1946-09-15','M','White'),(48,'Bernardo Bertolucci','1941-03-16','M','White'),(49,'Barry Levinson','1942-04-06','M','White'),(50,'Bruce Beresford','1940-08-16','M','White'),(51,'Kevin Costner','1955-01-18','M','White'),(52,'Jonathan Demme','1944-02-22','M','White'),(53,'Clint Eastwood','1930-05-31','M','White'),(54,'Steven Spielberg','1946-12-18','M','White'),(55,'Robert Zemeckis','1952-05-14','M','White'),(56,'Mel Gibson','1956-01-03','M','White'),(57,'Anthony Minghella','1954-01-06','M','White'),(58,'James Cameron','1954-08-16','M','White'),(59,'John Madden','1949-04-08','M','White'),(60,'Sam Mendes','1965-08-01','M','White'),(61,'Ridley Scott','1937-11-30','M','White'),(62,'Ron Howard','1954-03-01','M','White'),(63,'Rob Marshall','1960-10-17','M','White'),(64,'Peter Jackson','1961-10-31','M','White'),(65,'Paul Haggis','1953-03-10','M','White'),(66,'Martin Scorsese','1942-11-17','M','White'),(67,'Joel Coen','1954-11-29','M','White'),(68,'Danny Boyle','1956-10-20','M','White'),(69,'Kathryn Bigelow','1951-11-27','F','White'),(70,'Tom Hooper','1972-10-05','M','White'),(71,'Michel Hazanavicius','1967-03-29','M','White'),(72,'Ben Affleck','1972-08-15','M','White'),(73,'Steve McQueen','1969-10-09','M','Black'),(74,'Alejandro Iñárritu','1963-08-15','M','White'),(75,'Tom McCarthy','1966-06-07','M','White'),(76,'Barry Jenkins','1979-11-19','M','Black'),(77,'Guillermo del Toro','1964-10-09','M','White'),(78,'Peter Farrelly','1956-12-17','M','White'),(79,'Bong Joon-ho','1969-09-14','M','Asian'), (80,'Greta Gerwig','1983-08-04','F','White');
 /*!40000 ALTER TABLE `director` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -408,7 +408,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `create_film`(fn VARCHAR(200), fdr D
 							 fra VARCHAR(45), fp VARCHAR(45), fd INT, fg INT)
 BEGIN
 	INSERT INTO film(name,date_released,passes_bechdol,runtime,rating,photo,director,genre)
-    VALUES ('fn','fdr',fpb,fru,'fra','fp',fd,fg);
+    VALUES (fn, fdr ,fpb,fru,fra,fp,fd,fg);
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -533,7 +533,8 @@ DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_directors`()
 BEGIN
 	SELECT director.id, director.name
-    FROM director;
+    FROM director
+    ORDER BY director.name ASC;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -620,8 +621,8 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_film_festivals`()
 BEGIN
-	SELECT film_festivals.id, film_festivals.name
-    FROM film_festivals;
+	SELECT film_festival.id, film_festival.name
+    FROM film_festival;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -846,4 +847,3 @@ DELIMITER ;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2020-04-12 19:43:24
-

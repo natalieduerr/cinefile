@@ -1,8 +1,9 @@
 import React from 'react';
+import { Link } from "react-router-dom";
+
 import Grid from '@material-ui/core/Grid';
 
 import './navigation.scss';
-import { Link } from "react-router-dom";
 
 export default class Navigation extends React.Component {
 
