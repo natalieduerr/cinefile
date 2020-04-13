@@ -4,7 +4,21 @@
     border-radius: .5rem;
     padding: .5rem;
 
+    &.red {
+        background-color: #ffb3a3;
+        border-color: red;
+    }
+
+    &.blue {
+        background-color: #c9eaff;
+        border-color: blue;
+    }
+
     h4 {
         margin: 0;
+    }
+    
+    .buttons {
+        padding-right: 2rem;
     }
 }

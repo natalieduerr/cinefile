@@ -11,9 +11,6 @@ import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem/MenuItem";
 import Button from '@material-ui/core/Button';
 
-import { transitions, positions, Provider as AlertProvider } from 'react-alert'
-import AlertTemplate from 'react-alert-template-basic'
-
 import WatchedCard from "../../components/film/WatchedCard"
 
 import "./filmdetail.scss";
@@ -29,7 +26,7 @@ export default class FilmDetail extends React.Component {
     redirect: false,
     watched: [],
     watchedDate: new Date().toISOString().split('T')[0],
-    rating: '',
+    rating: null,
     success: false
   };
 
@@ -71,46 +68,45 @@ export default class FilmDetail extends React.Component {
   getFilmDetails = _ => {
     fetch(`http://localhost:5000/film/${this.props.location.state.filmId}/info`)
       .then(response => response.json())
-      .then(response => this.setState({ filmDetails: response.data[0] }))
+      .then(response => this.setState({ filmDetails: response.data[0][0] }))
       .catch(err => console.error(err))
   };
 
   getDirector = _ => {
     fetch(`http://localhost:5000/film/${this.props.location.state.filmId}/director`)
       .then(response => response.json())
-      .then(response => this.setState({ director: response.data[0] }))
+      .then(response => this.setState({ director: response.data[0][0] }))
       .catch(err => console.error(err))
   };
 
   getFestivals = _ => {
     fetch(`http://localhost:5000/film/${this.props.location.state.filmId}/festivals`)
       .then(response => response.json())
-      .then(response => this.setState({ festivals: response.data }))
+      .then(response => this.setState({ festivals: response.data[0] }))
       .catch(err => console.error(err))
   };
 
   getAwards = _ => {
     fetch(`http://localhost:5000/film/${this.props.location.state.filmId}/awards`)
       .then(response => response.json())
-      .then(response => this.setState({ awards: response.data }))
+      .then(response => this.setState({ awards: response.data[0] }))
       .catch(err => console.error(err))
   };
 
+
   getWatched = _ => {
-    fetch(`http://localhost:5000/watched/user?id=${localStorage.getItem('username')}&fid=${this.props.location.state.filmId}`)
-    .then(response => response.json())
-    .then(response => console.log(response.data))
-    // .then(response => this.setState({ watched: response.data }))
-    .catch(err => console.error(err))
-  }
+    fetch(`http://localhost:5000/film/watched/${localStorage.getItem('username')}/${this.props.location.state.filmId}/`)
+      .then(response => response.json())
+      .then(response => this.setState({ watched: response.data[0] }))
+      .catch(err => console.error(err))
+  };
 
   render() {
     const festivalList = this.state.festivals;
     const awardList = this.state.awards;
     const watched = this.state.watched;
     const user = localStorage.getItem('username');
-
-    // let watchedDate = this.state.watchedDate;
+    const self = this;
 
     function ShowFestival() {
       if (festivalList.length !== 0) {
@@ -152,9 +148,8 @@ export default class FilmDetail extends React.Component {
       }
       else if (watched.length !== 0) {
         return <Grid item xs={12}>
-          <h2>Watched on:</h2>
-          {watched.map(watched => (
-            <WatchedCard key={watched.id} film={watched} />
+          {self.state.watched.map(watched => (
+            <WatchedCard key={watched.id} watched={watched} />
           ))}
         </Grid>
       }

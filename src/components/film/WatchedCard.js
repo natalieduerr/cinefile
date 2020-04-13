@@ -1,24 +1,147 @@
 import React from 'react';
 
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+import TextField from "@material-ui/core/TextField";
+import MenuItem from "@material-ui/core/MenuItem/MenuItem";
+
 import "./watchedcard.scss";
 
 var dateFormat = require('dateformat');
 
 export default class WatchedCard extends React.Component {
+  state = {
+    mode: "view",
+    id: this.props.watched.id,
+    rating: this.props.watched.rating,
+    watchedDate: (dateFormat(this.props.watched.date, "isoDate"))
+  }
+
+  handleChange = name => event => {
+    this.setState(
+      { [name]: event.target.value }, () => {
+        console.log(this.state[name])
+      });
+  };
+
+  toEdit = event => {
+    this.setState({ mode: "edit" });
+  };
+
+  toView = event => {
+    this.setState({ mode: "view" })
+  };
+
+  toDelete = event => {
+    this.setState({ mode: "delete" })
+  };
+
+  handleSubmit = event => {
+    event.preventDefault();
+    console.log(this.state);
+    this.updateWatched();
+  };
+
+  handleDelete = event => {
+    event.preventDefault();
+    console.log(this.state);
+    this.deleteWatched();
+  }
+
+  updateWatched = () => {
+    fetch(`http://localhost:5000/watched/update/${this.state.id}/${this.state.watchedDate}/${this.state.rating}`)
+      .then(response => response.json())
+      .then(response => {
+        console.log(response);
+        this.setState({ mode: "view" });
+      })
+      .catch(err => console.error(err))
+  };
+
+  deleteWatched = () => {
+    fetch(`http://localhost:5000/watched/delete/${this.state.id}`)
+      .then(response => response.json())
+      .then(response => {
+        console.log(response);
+        this.setState({ mode: "view" });
+      })
+      .catch(err => console.error(err))
+  };
 
   render() {
-    return (
-      <Grid container className="watched-card">
-        <Grid container xs={12}>
-          <Grid item xs={6}><h4>{this.props.watched.name}</h4></Grid>
-          {/* Making rating none if null */}
-          <Grid item xs={6}>Rating: {this.props.watched.rating}</Grid>
+    if (this.state.mode === "view") {
+      return (
+        <Grid container className="watched-card">
+          <Grid container xs={8}>
+            <Grid item xs={6}><h4>{this.props.watched.name}</h4></Grid>
+            {/* Making rating none if null */}
+            <Grid item xs={6}>Rating: {this.props.watched.rating}</Grid>
+            <Grid item xs={12}>Date Watched: {dateFormat(this.props.watched.date, "longDate")}</Grid>
+          </Grid>
+          <Grid container xs={4} className="buttons" justify={"flex-end"}>
+            <Button color="primary" onClick={this.toEdit}>Edit</Button>
+            <Button color="secondary" onClick={this.toDelete} >Delete</Button>
+          </Grid>
         </Grid>
-        <Grid container>
-          <Grid item>Date Watched: {dateFormat(this.props.watched.date, "longDate")}</Grid>
+      );
+    }
+    else if (this.state.mode === "edit") {
+      return (
+        <Grid container className="watched-card blue">
+          <Grid container xs={8}>
+            <Grid item xs={4}><h4>{this.props.watched.name}</h4></Grid>
+            {/* Making rating none if null */}
+            <Grid item container direction={"row"} spacing={3} xs={8}>
+              <Grid item xs={6}>
+                <TextField variant="filled"
+                  select
+                  fullWidth
+                  label="Your rating:"
+                  value={this.state.rating}
+                  onChange={this.handleChange('rating')}
+                >
+                  <MenuItem value={1}>1</MenuItem>
+                  <MenuItem value={2}>2</MenuItem>
+                  <MenuItem value={3}>3</MenuItem>
+                  <MenuItem value={4}>4</MenuItem>
+                  <MenuItem value={5}>5</MenuItem>
+                </TextField>
+              </Grid>
+              <Grid item xs={6}>
+                <TextField variant="filled"
+                  required
+                  type={'date'}
+                  fullWidth
+                  label="Date Watched"
+                  value={this.state.watchedDate}
+                  onChange={this.handleChange('watchedDate')}
+                />
+              </Grid>
+            </Grid>
+          </Grid>
+
+          <Grid container xs={4} className="buttons" justify={"flex-end"}>
+            <Button color="primary" onClick={this.handleSubmit}>Save</Button>
+            <Button color="secondary" onClick={this.toView}>Cancel</Button>
+          </Grid>
         </Grid>
-      </Grid>
-    );
+      );
+    }
+    else if (this.state.mode === "delete") {
+      return (
+        <Grid container className="watched-card red">
+          <Grid container xs={8}>
+            <Grid item xs={6}><h4>{this.props.watched.name}</h4></Grid>
+            {/* Making rating none if null */}
+            <Grid item xs={6}>Rating: {this.props.watched.rating}</Grid>
+            <Grid item xs={12}>Date Watched: {dateFormat(this.props.watched.date, "longDate")}</Grid>
+          </Grid>
+          <Grid container xs={4} className="buttons" justify={"flex-end"}>
+            <Button color="primary" onClick={this.handleDelete}>Confirm Delete</Button>
+            <Button color="secondary" onClick={this.toView}>Cancel</Button>
+          </Grid>
+        </Grid>
+      );
+    }
   }
 }

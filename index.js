@@ -34,8 +34,8 @@ con.connect(function (err) {
 
 app.use(cors());
 
-// Films
-
+//////////////////////// Films ////////////////////////
+// Gets all films in the DB
 app.get("/film", (req, res) => {
   var get_all_films = `CALL get_all_films()`;
 
@@ -50,14 +50,11 @@ app.get("/film", (req, res) => {
   })
 });
 
+
+// Gets information on specified film
 app.get("/film/:id/info", function (req, res) {
   const id = req.params.id;
-  const get_film_info = `SELECT film.id, film.name AS name, film.date_released, film.passes_bechdol,
-  film.runtime, film.rating, film.photo, genre.name AS genre
-FROM film
-INNER JOIN genre
-ON genre.id = film.genre
-WHERE film.id = ${id};`;
+  const get_film_info = `CALL get_film_info(${id});`;
 
   con.query(get_film_info, (err, results) => {
     if (err) {
@@ -70,13 +67,10 @@ WHERE film.id = ${id};`;
   })
 });
 
+// Gets director for specified film
 app.get("/film/:id/director", function (req, res) {
   const id = req.params.id;
-  const get_director = `	SELECT director.id, director.name
-  FROM director
-  INNER JOIN film
-  ON film.director = director.id
-  WHERE film.id = ${id};`;
+  const get_director = `CALL get_director_for_film(${id});`;
 
   con.query(get_director, (err, results) => {
     if (err) {
@@ -89,15 +83,10 @@ app.get("/film/:id/director", function (req, res) {
   })
 });
 
+// Gets festivals for specified film
 app.get("/film/:id/festivals", function (req, res) {
   const id = req.params.id;
-  const get_festivals = `SELECT film_festival.id, film_festival.name 
-	FROM film_festival
-    INNER JOIN debuted_at_festival
-    ON debuted_at_festival.festival = film_festival.id
-    INNER JOIN film
-    ON film.id = debuted_at_festival.film
-    WHERE film.id = ${id};`;
+  const get_festivals = `CALL get_festivals_for_film(${id});`;
 
   con.query(get_festivals, (err, results) => {
     if (err) {
@@ -110,15 +99,10 @@ app.get("/film/:id/festivals", function (req, res) {
   })
 });
 
+// Gets awards for specified film
 app.get("/film/:id/awards", function (req, res) {
   const id = req.params.id;
-  const get_awards = `SELECT award.id, award.name, winner.year 
-  FROM winner
-  INNER JOIN award
-  ON award.id = winner.award
-  INNER JOIN film
-  ON film.id = winner.film
-  WHERE film.id = ${id};`;
+  const get_awards = `CALL get_awards_for_film(${id});`;
 
   con.query(get_awards, (err, results) => {
     if (err) {
@@ -131,7 +115,25 @@ app.get("/film/:id/awards", function (req, res) {
   })
 });
 
-// Awards
+// Gets watched entries for specified user for specified film
+app.get("/film/watched/:id/:fid", function (req, res) {
+  const id = req.params.id;
+  const fid = req.params.fid;
+  const get_user_has_watched = `CALL user_has_watched_film('${id}', ${fid});`;
+
+  con.query(get_user_has_watched, (err, results) => {
+    if (err) {
+      return res.send(err)
+    } else {
+      return res.json({
+        data: results
+      })
+    }
+  })
+});
+
+//////////////////////// Awards ////////////////////////
+// Gets films that have won specified award
 app.get("/award/:id/films", function (req, res) {
   const id = req.params.id;
   const get_awards = `SELECT film.id, film.name, film.date_released, film.photo
@@ -153,6 +155,7 @@ app.get("/award/:id/films", function (req, res) {
   })
 });
 
+// Gets information on specified award
 app.get("/award/:id/award", function (req, res) {
   const id = req.params.id;
   const get_info = `SELECT * FROM award
@@ -169,7 +172,8 @@ app.get("/award/:id/award", function (req, res) {
   })
 });
 
-// Festivals
+//////////////////////// Festival ////////////////////////
+// Gets films for specified festival
 app.get("/festival/:id/films", function (req, res) {
   const id = req.params.id;
   const get_awards = `SELECT film.id, film.name, film.date_released, film.photo
@@ -191,6 +195,7 @@ app.get("/festival/:id/films", function (req, res) {
   })
 });
 
+// Gets festival info for specified festival
 app.get("/festival/:id/festival", function (req, res) {
   const id = req.params.id;
   const get_info = `SELECT * FROM film_festival
@@ -207,7 +212,8 @@ app.get("/festival/:id/festival", function (req, res) {
   })
 });
 
-// Director
+//////////////////////// Director ////////////////////////
+// Gets films for specified director
 app.get("/director/:id/films", function (req, res) {
   const id = req.params.id;
   const get_info = `SELECT film.id, film.name, film.date_released, film.photo
@@ -225,6 +231,7 @@ app.get("/director/:id/films", function (req, res) {
   })
 });
 
+// Gets director information for specified director
 app.get("/director/:id/director", function (req, res) {
   const id = req.params.id;
   const get_info = `SELECT *
@@ -308,6 +315,7 @@ app.get("/watched/:id/women", function (req, res) {
   })
 });
 
+// Gets number of watched films that pass the Bechdol test
 app.get("/watched/:id/bechdol", function (req, res) {
   const id = req.params.id;
   const get_bechdol = `select BCD_percent('${id}');`;
@@ -323,25 +331,42 @@ app.get("/watched/:id/bechdol", function (req, res) {
   })
 });
 
-// Not working pls kill me
-// Gets specified users watched entries for specified film 
-app.get("/watched/user", function (req, res) {
-  const {id, fid} = req.query;
-  const get_watched = `CALL user_has_watched_film('natalie', 89);`;
-
-  con.query(get_watched, (err, results, fields) => {
+// Updates the specified watched entry with with specified information
+app.get("/watched/update/:wid/:date/:rating", function (req, res) {
+  const wid = req.params.wid;
+  const date = req.params.date;
+  const rating = req.params.rating;
+  const update_watched = `CALL update_watched(${wid}, '${date}', ${rating});`;
+  
+  con.query(update_watched, (err, results) => {
     if (err) {
       return res.send(err)
     } else {
       return res.json({
-        message: 'hello',
-        data: results
+        message: 'Successfully updated watched.',
+        data:results
       })
     }
   })
 });
 
+// Deletes the specified watched entry
+app.get("/watched/delete/:wid", function (req, res) {
+  const wid = req.params.wid;
+  const delete_watched = `CALL delete_watched(${wid});`;
+  
+  con.query(delete_watched, (err, results) => {
+    if (err) {
+      return res.send(err)
+    } else {
+      return res.json({
+        message: 'Successfully deleted watched.',
+        data:results
+      })
+    }
+  })
+});
 
 app.listen(5000, () => {
-  console.log("potato on port 5000");
+  console.log("Terror from the Year 5000 connected");
 });
