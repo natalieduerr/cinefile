@@ -117,7 +117,11 @@ CREATE TABLE `film` (
   KEY `genre` (`genre`),
   CONSTRAINT `film_ibfk_1` FOREIGN KEY (`director`) REFERENCES `director` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `film_ibfk_2` FOREIGN KEY (`genre`) REFERENCES `genre` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+<<<<<<< Updated upstream
 ) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+=======
+) ENGINE=InnoDB AUTO_INCREMENT=94 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+>>>>>>> Stashed changes
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -197,7 +201,7 @@ CREATE TABLE `watched` (
   KEY `film` (`film`),
   CONSTRAINT `watched_ibfk_1` FOREIGN KEY (`film`) REFERENCES `film` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `watched_chk_1` CHECK (((`rating` = NULL) or (`rating` = 1) or (`rating` = 2) or (`rating` = 3) or (`rating` = 4) or (`rating` = 5)))
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -206,7 +210,7 @@ CREATE TABLE `watched` (
 
 LOCK TABLES `watched` WRITE;
 /*!40000 ALTER TABLE `watched` DISABLE KEYS */;
-INSERT INTO `watched` VALUES (1,'kia','2019-10-27',5,92),(2,'natalie','2019-11-13',5,89),(3,'natalie','2019-11-13',NULL,64),(4,'abby','2019-12-22',NULL,90),(5,'kia','2019-12-16',5,34),(6,'abby','2020-01-02',NULL,38),(7,'kia','2018-03-28',4,7),(8,'natalie','2020-02-16',NULL,42),(9,'abby','2020-04-08',NULL,16),(10,'kia','2020-04-06',3,91);
+INSERT INTO `watched` VALUES (1,'kia','2019-10-27',5,92),(2,'natalie','2019-11-13',5,89),(3,'natalie','2019-11-13',NULL,64),(4,'abby','2019-12-22',NULL,90),(5,'kia','2020-03-29',5,34),(6,'abby','2020-01-02',NULL,38),(7,'kia','2018-03-28',4,7),(8,'natalie','2020-02-16',NULL,42),(9,'abby','2020-04-08',NULL,16),(10,'kia','2020-04-06',3,91),(13,'abby','2044-12-12',5,82);
 /*!40000 ALTER TABLE `watched` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -257,32 +261,24 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `BCD_percent`(uname VARCHAR(45)) RETU
     READS SQL DATA
     DETERMINISTIC
 BEGIN
-	DECLARE count_movies INT;
-    DECLARE count_BCD INT;
+	DECLARE count_BCD INT;
     
-    SELECT COUNT(distinct film.id) INTO count_movies 
-    FROM (SELECT film.id,watched.rate,watched.rating
+    SELECT COUNT(distinct fi) INTO count_BCD
+    FROM (SELECT film.id as fi,watched.date,watched.rating
 		  FROM watched
 		  INNER JOIN film
 		  ON film.id = watched.film
-		  WHERE winner.user = uname) AS uwu;
-    
-    SELECT COUNT(distinct film.id) INTO count_BCD
-    FROM (SELECT film.id,watched.rate,watched.rating
-		  FROM watched
-		  INNER JOIN film
-		  ON film.id = watched.film
-		  WHERE winner.user = uname
+		  WHERE watched.user = uname
           AND film.passes_bechdol = true) AS bc; 
 	
-    RETURN (count_BCD / count_movies * 100);
+    RETURN count_BCD;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP FUNCTION IF EXISTS `check_repeat_film` */;
+/*!50003 DROP FUNCTION IF EXISTS `count_watched` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -292,26 +288,20 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` FUNCTION `check_repeat_film`(fname VARCHAR(200), fdate DATE) RETURNS tinyint(1)
+CREATE DEFINER=`root`@`localhost` FUNCTION `count_watched`(uname VARCHAR(45)) RETURNS int
     READS SQL DATA
     DETERMINISTIC
-BEGIN 
-	DECLARE boo boolean;
-
-	SET @homeland = NULL;
-    SELECT fid INTO @homeland FROM film 
-    WHERE film.name = fname
-    AND film.date = fdate;
+BEGIN
+    DECLARE count_movies INT;
     
-    CASE
-    WHEN (@homeland = NULL)
-		THEN SET boo = false;
-	WHEN
-    (@homeland > 0)
-		THEN SET boo = TRUE;
-	END CASE;
-    
-    RETURN(boo);
+	SELECT COUNT(distinct fi) INTO count_movies 
+		FROM (SELECT film.id as fi,watched.date,watched.rating
+			  FROM watched
+			  INNER JOIN film
+			  ON film.id = watched.film
+			  WHERE watched.user = uname) AS uwu;
+		
+	RETURN count_movies;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -328,26 +318,19 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` FUNCTION `rating_percentage`(uname VARCHAR(45),rate INT) RETURNS int
+CREATE DEFINER=`root`@`localhost` FUNCTION `rating_percentage`(uname VARCHAR(45),rr INT) RETURNS int
     READS SQL DATA
     DETERMINISTIC
 BEGIN
-	DECLARE count_ratings INT;
     DECLARE count_rated INT;
     
-    SELECT COUNT(watched.film) INTO count_ratings
-    FROM watched
-    WHERE watched.film = film.id
-    AND watches.user = uname
-    AND watched.rating = rate;
+    SELECT COUNT(wr) INTO count_rated
+    FROM (SELECT watched.rating as wr
+		  FROM watched
+		  WHERE watched.user = uname) as ope
+    WHERE ope.wr = rr;
     
-    SELECT COUNT(watched.film) INTO count_rated
-    FROM watched
-    WHERE watched.film = film.id
-    AND watches.user = uname
-    AND watched.rating != NULL;
-    
-    RETURN (count_rated / count_ratings);
+    RETURN count_rated;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -368,26 +351,19 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `women_directed_percent`(uname VARCHA
     READS SQL DATA
     DETERMINISTIC
 BEGIN
-	DECLARE count_movies INT;
     DECLARE count_women INT;
     
-    SELECT COUNT(distinct film.id) INTO count_movies 
-    FROM (SELECT film.id,watched.rate,watched.rating
-		  FROM watched
-		  INNER JOIN film
-		  ON film.id = watched.film
-		  WHERE winner.user = uname) AS uwu;
-    
-    SELECT COUNT(distinct film.id) INTO count_women
-    FROM (SELECT film.id,watched.rate,watched.rating
-		  FROM watched
-		  INNER JOIN film
+    SELECT COUNT(distinct fi) INTO count_women
+    FROM (SELECT film.id as fi,watched.date,watched.rating
+		  FROM film
+		  INNER JOIN watched
 		  ON film.id = watched.film
           INNER JOIN director
           ON film.director = director.id
-		  WHERE winner.user = uname
-          AND director.gender = "woman") AS bc; 
+		  WHERE watched.user = uname
+          AND director.gender = "F") AS bc; 
 	
+<<<<<<< Updated upstream
     RETURN (count_women / count_movies * 100);
 END ;;
 DELIMITER ;
@@ -409,6 +385,9 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `add_festival_for_film`(ffid INT,fil
 BEGIN
 	INSERT INTO debuted_at_festival(film,festival)
     VALUES (filmid,ffid);
+=======
+    RETURN count_women;
+>>>>>>> Stashed changes
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -436,6 +415,7 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+<<<<<<< Updated upstream
 /*!50003 DROP PROCEDURE IF EXISTS `create_watched` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -783,6 +763,8 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
+=======
+>>>>>>> Stashed changes
 /*!50003 DROP PROCEDURE IF EXISTS `get_watched` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -819,8 +801,13 @@ DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `update_watched`(wid INT,wdate DATE,wrate INT)
 BEGIN
 	UPDATE watched
+<<<<<<< Updated upstream
     SET date= 'wdate'
     AND rate= wrate
+=======
+    SET date = wdate,
+		rating = wrate
+>>>>>>> Stashed changes
     WHERE id = wid;
 END ;;
 DELIMITER ;
@@ -860,4 +847,8 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
+<<<<<<< Updated upstream
 -- Dump completed on 2020-04-12 15:18:27
+=======
+-- Dump completed on 2020-04-12 19:43:24
+>>>>>>> Stashed changes

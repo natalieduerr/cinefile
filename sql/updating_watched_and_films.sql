@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 -- makes a new watched tuple
 DROP PROCEDURE IF EXISTS create_watched;
 
@@ -21,6 +22,9 @@ BEGIN
     WHERE watched.user = uname
     AND watched.film = fid;
 END //
+=======
+USE films;
+>>>>>>> Stashed changes
 
 -- updates a new watched tuple
 DROP PROCEDURE IF EXISTS update_watched;
@@ -30,8 +34,13 @@ CREATE PROCEDURE update_watched(wid INT,wdate DATE,wrate INT)
 
 BEGIN
 	UPDATE watched
+<<<<<<< Updated upstream
     SET date= 'wdate'
     AND rate= wrate
+=======
+    SET date = wdate,
+		rating = wrate
+>>>>>>> Stashed changes
     WHERE id = wid;
 END //
 
@@ -69,16 +78,15 @@ BEGIN
 	DECLARE boo boolean;
 
 	SET @homeland = NULL;
-    SELECT fid INTO @homeland FROM film 
+    SELECT film.id INTO @homeland FROM film 
     WHERE film.name = fname
-    AND film.date = fdate;
+    AND film.date_released = fdate;
     
     CASE
-    WHEN (@homeland = NULL)
-		THEN SET boo = false;
 	WHEN
     (@homeland > 0)
 		THEN SET boo = TRUE;
+	ELSE SET boo = FALSE;
 	END CASE;
     
     RETURN(boo);
