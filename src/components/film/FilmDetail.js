@@ -61,7 +61,6 @@ export default class FilmDetail extends React.Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    console.log(this.state);
     this.createWatched();
   };
 

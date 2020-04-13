@@ -13,7 +13,6 @@ var con = mysql.createConnection({
 con.connect(function (err) {
   if (err) throw err;
   console.log("Connected!");
-
 });
 
 // const get_film_info = `SELECT film.id, film.name, film.date_released, film.passes_bechdol,
@@ -299,7 +298,7 @@ app.get("/watched/:id/count", function (req, res) {
   })
 });
 
-// Gets number of watched films directed by women
+// Gets number of watched films by specified user directed by women
 app.get("/watched/:id/women", function (req, res) {
   const id = req.params.id;
   const get_women_directed = `select women_directed('${id}');`;
@@ -315,7 +314,7 @@ app.get("/watched/:id/women", function (req, res) {
   })
 });
 
-// Gets number of watched films that pass the Bechdol test
+// Gets number of watched films by specified user that pass the Bechdol test
 app.get("/watched/:id/bechdol", function (req, res) {
   const id = req.params.id;
   const get_bechdol = `select BCD_percent('${id}');`;
@@ -366,6 +365,25 @@ app.get("/watched/delete/:wid", function (req, res) {
     }
   })
 });
+
+// Get number of films rated NUM by specified user
+app.get("/watched/:id/:num", function (req, res) {
+  const id = req.params.id;
+  const num = req.params.num;
+  const rating_percentage = `SELECT rating_percentage('${id}', ${num});`;
+
+  con.query(rating_percentage, (err, results) => {
+    if (err) {
+      return res.send(err)
+    } else {
+      return res.json({
+        data:results
+      })
+    }
+  })
+});
+
+
 
 app.listen(5000, () => {
   console.log("Terror from the Year 5000 connected");

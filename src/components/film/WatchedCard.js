@@ -18,10 +18,7 @@ export default class WatchedCard extends React.Component {
   }
 
   handleChange = name => event => {
-    this.setState(
-      { [name]: event.target.value }, () => {
-        console.log(this.state[name])
-      });
+    this.setState({ [name]: event.target.value });
   };
 
   toEdit = event => {
@@ -38,13 +35,11 @@ export default class WatchedCard extends React.Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    console.log(this.state);
     this.updateWatched();
   };
 
   handleDelete = event => {
     event.preventDefault();
-    console.log(this.state);
     this.deleteWatched();
   }
 
@@ -52,7 +47,6 @@ export default class WatchedCard extends React.Component {
     fetch(`http://localhost:5000/watched/update/${this.state.id}/${this.state.watchedDate}/${this.state.rating}`)
       .then(response => response.json())
       .then(response => {
-        console.log(response);
         this.setState({ mode: "view" });
       })
       .catch(err => console.error(err))
@@ -62,7 +56,6 @@ export default class WatchedCard extends React.Component {
     fetch(`http://localhost:5000/watched/delete/${this.state.id}`)
       .then(response => response.json())
       .then(response => {
-        console.log(response);
         this.setState({ mode: "view" });
       })
       .catch(err => console.error(err))

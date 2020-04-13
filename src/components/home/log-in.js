@@ -2,7 +2,6 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import { Redirect } from "react-router-dom";
-import { useHistory } from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
 
 import "./log-in.scss";
@@ -16,17 +15,6 @@ export default class LogIn extends React.Component {
         };
     }
 
-    // //   Creates User in database
-    // createUser = () => {
-    //     fetch(`http://localhost:5000/film/create?owner_id=${user_id}&title=${this.state.title}&start=${this.state.start}&end=${this.state.end}&pet_id=${this.state.pet_id}&wage=${this.state.wage}&description=${this.state.description}`)
-    //         .then(response => response.json())
-    //         .then(response => {
-    //             console.log(response);
-    //             this.setState({ redirect: true });
-    //         })
-    //         .catch(err => console.error(err))
-    // };
-
     renderRedirect = () => {
         if (this.state.redirect) {
             return <Redirect push to= '/explore' />  
@@ -39,7 +27,6 @@ export default class LogIn extends React.Component {
 
     handleSubmit = event => {
         if (this.state.username.length > 0) {
-            // createUser();
             localStorage.setItem('username', this.state.username);
             this.setState({
                 redirect: true
