@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 -- makes a new watched tuple
 DROP PROCEDURE IF EXISTS create_watched;
 
@@ -11,7 +10,7 @@ BEGIN
 END //
 
 -- selects a watched tuples for a given film from a user
-DROP PROCEDURE IF EXISTS user_has_watched_film;
+DROP PROCEDURE IF EXISTS user_has_watched_film;//
 
 DELIMITER //
 CREATE PROCEDURE user_has_watched_film(uname VARCHAR(45),fid INT)
@@ -22,30 +21,22 @@ BEGIN
     WHERE watched.user = uname
     AND watched.film = fid;
 END //
-=======
-USE films;
->>>>>>> Stashed changes
 
 -- updates a new watched tuple
-DROP PROCEDURE IF EXISTS update_watched;
+DROP PROCEDURE IF EXISTS update_watched;//
 
 DELIMITER //
 CREATE PROCEDURE update_watched(wid INT,wdate DATE,wrate INT)
 
 BEGIN
 	UPDATE watched
-<<<<<<< Updated upstream
-    SET date= 'wdate'
-    AND rate= wrate
-=======
     SET date = wdate,
 		rating = wrate
->>>>>>> Stashed changes
     WHERE id = wid;
 END //
 
 -- deletes a new watched tuple
-DROP PROCEDURE IF EXISTS delete_watched;
+DROP PROCEDURE IF EXISTS delete_watched;//
 
 DELIMITER //
 CREATE PROCEDURE delete_watched(wid INT)
@@ -56,7 +47,7 @@ BEGIN
 END //
 
 -- makes a new film tuple
-DROP PROCEDURE IF EXISTS create_film;
+DROP PROCEDURE IF EXISTS create_film;//
 
 DELIMITER //
 CREATE PROCEDURE create_film(fn VARCHAR(200), fdr DATE, fpb BOOLEAN, fru INT,
@@ -68,7 +59,7 @@ BEGIN
 END //
 
 -- returns true if there exists a film with the given name and release date
-DROP FUNCTION IF EXISTS check_repeat_film;
+DROP FUNCTION IF EXISTS check_repeat_film;//
 
 DELIMITER //
 CREATE FUNCTION check_repeat_film(fname VARCHAR(200), fdate DATE)
@@ -93,7 +84,7 @@ BEGIN
 END //
 
 -- gets all the genre types and their ids
-DROP PROCEDURE IF EXISTS get_genres;
+DROP PROCEDURE IF EXISTS get_genres;//
 
 DELIMITER // 
 CREATE PROCEDURE get_genres()
@@ -102,7 +93,7 @@ BEGIN
 END //
 
 -- gets all the director names and their ids
-DROP PROCEDURE IF EXISTS get_directors;
+DROP PROCEDURE IF EXISTS get_directors;//
 
 DELIMITER // 
 CREATE PROCEDURE get_directors()
@@ -112,7 +103,7 @@ BEGIN
 END //
 
 -- gets all the film festival names and their ids
-DROP PROCEDURE IF EXISTS get_film_festivals;
+DROP PROCEDURE IF EXISTS get_film_festivals;//
 
 DELIMITER // 
 CREATE PROCEDURE get_film_festivals()
@@ -122,7 +113,7 @@ BEGIN
 END //
 
 -- adds a debuted at film festival for a film festival and a film
-DROP PROCEDURE IF EXISTS add_festival_for_film;
+DROP PROCEDURE IF EXISTS add_festival_for_film;//
 
 DELIMITER // 
 CREATE PROCEDURE add_festival_for_film(ffid INT,filmid INT)
