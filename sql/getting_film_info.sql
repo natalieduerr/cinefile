@@ -22,7 +22,7 @@ BEGIN
     ON debuted_at_festival.festival = film_festival.id
     INNER JOIN film
     ON film.id = debuted_at_festival.film
-    WHERE film.name = fname;
+    WHERE film.id = fid;
 END //
 
 -- fetching the director of a film and their information
