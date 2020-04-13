@@ -7,7 +7,8 @@ var con = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: '',
-  database: 'films'
+  database: 'films',
+  insecureAuth : true
 });
 
 con.connect(function (err) {
