@@ -3,7 +3,7 @@ USE films;
 -- ** System NEEDS to store username for the use of these
 
 -- gets all watched rows for a given user
-DROP PROCEDURE IF EXISTS get_watched;
+DROP PROCEDURE IF EXISTS get_watched;//
 
 DELIMITER // 
 CREATE PROCEDURE get_watched(uname VARCHAR(45))
@@ -16,7 +16,7 @@ BEGIN
 END //
 
 -- gets the number of distinct movies watched that pass BCD
-DROP FUNCTION IF EXISTS BCD_percent;
+DROP FUNCTION IF EXISTS BCD_percent;//
 
 DELIMITER //
 CREATE FUNCTION BCD_percent(uname VARCHAR(45))
@@ -37,7 +37,7 @@ BEGIN
 END //
            
 -- gets the number of distinct movies watched that are directed by women
-DROP FUNCTION IF EXISTS women_directed_percent;
+DROP FUNCTION IF EXISTS women_directed_percent;//
 
 DELIMITER //
 CREATE FUNCTION women_directed_percent(uname VARCHAR(45))
@@ -60,7 +60,7 @@ BEGIN
 END //
 
 -- returns the number of the times a user gave a given rating 
-DROP FUNCTION IF EXISTS rating_percentage;
+DROP FUNCTION IF EXISTS rating_percentage;//
 
 DELIMITER //
 CREATE FUNCTION rating_percentage(uname VARCHAR(45),rr INT)
@@ -79,7 +79,7 @@ BEGIN
 END //
 
 -- returns the number of the times a user has seen a watched
-DROP FUNCTION IF EXISTS count_watched;
+DROP FUNCTION IF EXISTS count_watched;//
 
 DELIMITER //
 CREATE FUNCTION count_watched(uname VARCHAR(45))

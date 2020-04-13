@@ -11,7 +11,7 @@ BEGIN
 END //
 
 -- fetching all the film festivals and their information given a film name
-DROP PROCEDURE IF EXISTS get_festivals_for_film;
+DROP PROCEDURE IF EXISTS get_festivals_for_film;//
 
 DELIMITER // 
 CREATE PROCEDURE get_festivals_for_film(fid INT)
@@ -26,7 +26,7 @@ BEGIN
 END //
 
 -- fetching the director of a film and their information
-DROP PROCEDURE IF EXISTS get_director_for_film;
+DROP PROCEDURE IF EXISTS get_director_for_film;//
 
 DELIMITER // 
 CREATE PROCEDURE get_director_for_film(fid INT)
@@ -39,7 +39,7 @@ BEGIN
 END //
 
 -- fetching the awards of a film and their information
-DROP PROCEDURE IF EXISTS get_awards_for_film;
+DROP PROCEDURE IF EXISTS get_awards_for_film;//
 
 DELIMITER // 
 CREATE PROCEDURE get_awards_for_film(fid INT)
@@ -54,7 +54,7 @@ BEGIN
 END //
 
 -- fetching all the general information for a film
-DROP PROCEDURE IF EXISTS get_film_info;
+DROP PROCEDURE IF EXISTS get_film_info;//
 
 DELIMITER // 
 CREATE PROCEDURE get_film_info(fid INT)

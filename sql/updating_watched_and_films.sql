@@ -1,3 +1,5 @@
+USE films;
+
 -- makes a new watched tuple
 DROP PROCEDURE IF EXISTS create_watched;
 
@@ -35,15 +37,15 @@ BEGIN
     WHERE id = wid;
 END //
 
--- deletes a new watched tuple
-DROP PROCEDURE IF EXISTS delete_watched;//
+-- deletes a user from the watched 
+DROP PROCEDURE IF EXISTS delete_user;//
 
 DELIMITER //
-CREATE PROCEDURE delete_watched(wid INT)
+CREATE PROCEDURE delete_user(username VARCHAR(45))
 
 BEGIN
 	DELETE FROM watched
-    WHERE id = wid;
+    WHERE user = username;
 END //
 
 -- makes a new film tuple
@@ -120,4 +122,15 @@ CREATE PROCEDURE add_festival_for_film(ffid INT,filmid INT)
 BEGIN
 	INSERT INTO debuted_at_festival(film,festival)
     VALUES (filmid,ffid);
+END //
+
+-- deletes a new watched tuple
+DROP PROCEDURE IF EXISTS delete_watched;//
+
+DELIMITER //
+CREATE PROCEDURE delete_watched(wid INT)
+
+BEGIN
+	DELETE FROM watched
+    WHERE id = wid;
 END //
