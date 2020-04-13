@@ -35,19 +35,6 @@ con.connect(function (err) {
 app.use(cors());
 
 // Films
-// app.get("/film", (req, res) => {
-//   var get_all_films = `SELECT id, name, date_released, photo FROM film;`;
-
-//   con.query(get_all_films, (err, results) => {
-//     if (err) {
-//       return res.send(err)
-//     } else {
-//       return res.json({
-//         data: results
-//       })
-//     }
-//   })
-// });
 
 app.get("/film", (req, res) => {
   var get_all_films = `CALL get_all_films()`;
@@ -282,6 +269,21 @@ app.get("/watched/:id", function (req, res) {
     } else {
       return res.json({
         data: results
+      })
+    }
+  })
+});
+
+app.get("/watched/:id/women", function (req, res) {
+  const id = req.params.id;
+  const get_women_directed = `select women_directed('${id}');`;
+  
+  con.query(get_women_directed, (err, results) => {
+    if (err) {
+      return res.send(err)
+    } else {
+      return res.json({
+        data:results
       })
     }
   })

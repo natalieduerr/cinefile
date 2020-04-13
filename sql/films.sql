@@ -359,7 +359,7 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 DROP FUNCTION IF EXISTS `women_directed_percent` */;
+/*!50003 DROP FUNCTION IF EXISTS `women_directed` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
 /*!50003 SET @saved_col_connection = @@collation_connection */ ;
@@ -369,19 +369,11 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-CREATE DEFINER=`root`@`localhost` FUNCTION `women_directed_percent`(uname VARCHAR(45)) RETURNS int
+CREATE DEFINER=`root`@`localhost` FUNCTION `women_directed`(uname VARCHAR(45)) RETURNS int
     READS SQL DATA
     DETERMINISTIC
 BEGIN
-	DECLARE count_movies INT;
     DECLARE count_women INT;
-    
-    SELECT COUNT(distinct film.id) INTO count_movies 
-    FROM (SELECT film.id,watched.date,watched.rating
-		  FROM watched
-		  INNER JOIN film
-		  ON film.id = watched.film
-		  WHERE watched.user = uname) AS uwu;
     
     SELECT COUNT(distinct film.id) INTO count_women
     FROM (SELECT film.id,watched.date,watched.rating
@@ -393,7 +385,7 @@ BEGIN
 		  WHERE watched.user = uname
           AND director.gender = "woman") AS bc; 
 	
-    RETURN (count_women / count_movies * 100);
+    RETURN (count_women);
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -867,9 +859,12 @@ DELIMITER ;
 
 -- Dump completed on 2020-04-12 15:18:27
 
-CALL create_watched('natalie', 92, '2020-04-12', 4);
+-- CALL create_watched('natalie', 92, '2020-04-12', 4);
 
-SELECT * from watched;
+-- SELECT * from watched;
 
-select films.women_directed_percent('natalie');
-
+SELECT watched.id, film.name, watched.date, watched.rating
+    FROM watched
+    INNER JOIN film
+    ON film.id = watched.film
+    WHERE watched.user = 'natalie';

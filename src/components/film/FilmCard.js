@@ -1,6 +1,5 @@
 import React from 'react';
 
-// import './FilmCard.scss';
 import Card from "@material-ui/core/Card/Card";
 import CardActionArea from "@material-ui/core/CardActionArea/CardActionArea";
 import CardMedia from "@material-ui/core/CardMedia/CardMedia";
@@ -9,7 +8,6 @@ import Grid from '@material-ui/core/Grid';
 
 import { Redirect } from "react-router-dom";
 
-// import {filmPoster} from "../../constants";
 import './filmcard.scss'
 
 var dateFormat = require('dateformat');

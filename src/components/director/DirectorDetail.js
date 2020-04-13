@@ -1,7 +1,5 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import { Link } from "react-router-dom";
 
 import FilmCard from '../../components/film/FilmCard.js'
 
@@ -18,7 +16,6 @@ export default class Dashboard extends React.Component {
     componentDidMount() {
         this.getFilms();
         this.getDirector();
-        console.log(this.state.director);
     }
 
     getFilms = _ => {

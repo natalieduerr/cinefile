@@ -42,7 +42,8 @@ export default class FilmDetail extends React.Component {
       .then(response => {
         console.log(response);
         // Success message, clear state for date and rating
-        // this.setState({redirect: true});
+        this.setState({rating: ''});
+        this.setState({watchedDate: new Date().toISOString().split('T')[0] });
       })
       .catch(err => console.error(err))
   };
@@ -188,7 +189,7 @@ export default class FilmDetail extends React.Component {
               </Grid>
               {user !== '' ? (
                 <Grid container xs={12} spacing={3}>
-                  <Grid item xs={6}>
+                  <Grid item xs={4}>
                     <TextField variant="filled"
                       required
                       type={'date'}
@@ -198,7 +199,7 @@ export default class FilmDetail extends React.Component {
                       onChange={this.handleChange('watchedDate')}
                     />
                   </Grid>
-                  <Grid item xs={6}>
+                  <Grid item xs={4}>
                     <TextField variant="filled"
                       select
                       fullWidth
@@ -213,15 +214,18 @@ export default class FilmDetail extends React.Component {
                       <MenuItem value={5}>5</MenuItem>
                     </TextField>
                   </Grid>
+                  <Grid item xs={4}>
+                    <Button color={'primary'} variant={'contained'} type={'button'}
+                      onClick={this.handleSubmit}>+ Add Watched</Button>
+                  </Grid>
                 </Grid>
+
               ) : (
                   <Grid item xs={12}>
                     <h4>Log-in to add your rating</h4>
                   </Grid>
                 )
               }
-              <Button color={'primary'} variant={'contained'} type={'button'}
-                onClick={this.handleSubmit}>+ Add Watched</Button>
             </Grid>
           </Grid>
         </div>
