@@ -601,7 +601,7 @@ BEGIN
     ON debuted_at_festival.festival = film_festival.id
     INNER JOIN film
     ON film.id = debuted_at_festival.film
-    WHERE film.name = fname;
+    WHERE film.id = fid;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -775,13 +775,15 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `get_watched`(uname VARCHAR(45))
 BEGIN
-	SELECT film.name, watched.date, watched.rating
+	SELECT watched.id, film.name, watched.date, watched.rating
     FROM watched
     INNER JOIN film
     ON film.id = watched.film
-    WHERE watched.user = uname;
+    WHERE watched.user = uname
+    ORDER BY watched.date DESC;
 END ;;
 DELIMITER ;
+
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -820,10 +822,13 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `user_has_watched_film`(uname VARCHAR(45),fid INT)
 BEGIN
-	SELECT film.name, watched.date, watched.rating
+	SELECT watched.id, film.name, watched.date, watched.rating
     FROM watched
+    INNER JOIN film
+    ON film.id = watched.film
     WHERE watched.user = uname
-    AND watched.film = fid;
+    AND watched.film = fid
+    ORDER BY watched.date DESC;
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;

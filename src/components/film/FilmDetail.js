@@ -26,14 +26,16 @@ export default class FilmDetail extends React.Component {
     redirect: false,
     watched: [],
     watchedDate: new Date().toISOString().split('T')[0],
-    rating: ''
+    rating: null,
+    success: false
   };
 
   componentDidMount() {
     this.getFilmDetails();
     this.getDirector();
     this.getFestivals();
-    this.getAwards()
+    this.getAwards();
+    this.getWatched();
   }
 
   createWatched = () => {
@@ -41,9 +43,14 @@ export default class FilmDetail extends React.Component {
       .then(response => response.json())
       .then(response => {
         console.log(response);
-        // Success message, clear state for date and rating
-        this.setState({rating: ''});
-        this.setState({watchedDate: new Date().toISOString().split('T')[0] });
+        this.setState({ rating: '' });
+        this.setState({ watchedDate: new Date().toISOString().split('T')[0] });
+        this.setState({ success: true });
+        setTimeout(() => {
+          this.setState({
+            success: false
+          });
+        }, 5000);
       })
       .catch(err => console.error(err))
   };
@@ -54,35 +61,42 @@ export default class FilmDetail extends React.Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    console.log(this.state);
     this.createWatched();
   };
 
   getFilmDetails = _ => {
     fetch(`http://localhost:5000/film/${this.props.location.state.filmId}/info`)
       .then(response => response.json())
-      .then(response => this.setState({ filmDetails: response.data[0] }))
+      .then(response => this.setState({ filmDetails: response.data[0][0] }))
       .catch(err => console.error(err))
   };
 
   getDirector = _ => {
     fetch(`http://localhost:5000/film/${this.props.location.state.filmId}/director`)
       .then(response => response.json())
-      .then(response => this.setState({ director: response.data[0] }))
+      .then(response => this.setState({ director: response.data[0][0] }))
       .catch(err => console.error(err))
   };
 
   getFestivals = _ => {
     fetch(`http://localhost:5000/film/${this.props.location.state.filmId}/festivals`)
       .then(response => response.json())
-      .then(response => this.setState({ festivals: response.data }))
+      .then(response => this.setState({ festivals: response.data[0] }))
       .catch(err => console.error(err))
   };
 
   getAwards = _ => {
     fetch(`http://localhost:5000/film/${this.props.location.state.filmId}/awards`)
       .then(response => response.json())
-      .then(response => this.setState({ awards: response.data }))
+      .then(response => this.setState({ awards: response.data[0] }))
+      .catch(err => console.error(err))
+  };
+
+
+  getWatched = _ => {
+    fetch(`http://localhost:5000/film/watched/${localStorage.getItem('username')}/${this.props.location.state.filmId}/`)
+      .then(response => response.json())
+      .then(response => this.setState({ watched: response.data[0] }))
       .catch(err => console.error(err))
   };
 
@@ -91,8 +105,7 @@ export default class FilmDetail extends React.Component {
     const awardList = this.state.awards;
     const watched = this.state.watched;
     const user = localStorage.getItem('username');
-
-    let watchedDate = this.state.watchedDate;
+    const self = this;
 
     function ShowFestival() {
       if (festivalList.length !== 0) {
@@ -132,14 +145,13 @@ export default class FilmDetail extends React.Component {
           <h4>Log-in to see watched films</h4>
         </Grid>
       }
-      // else if (watched.length !== 0) {
-      //   return <Grid item xs={12}>
-      //     <h2>Awards Won:</h2>
-      //     {watched.map(watched => (
-      //       <WatchedCard key={watched.id} film={watched} />
-      //     ))}
-      //   </Grid>
-      // }
+      else if (watched.length !== 0) {
+        return <Grid item xs={12}>
+          {self.state.watched.map(watched => (
+            <WatchedCard key={watched.id} watched={watched} />
+          ))}
+        </Grid>
+      }
       else {
         return <Grid item xs={12}>
           <h4>You haven't seen this film</h4>
@@ -164,6 +176,9 @@ export default class FilmDetail extends React.Component {
               spacing={3}
               alignItems={'center'}
               className={"film-detail"}>
+
+              {this.state.success ? <div className="success-pop-up">Successfully added!</div> : (null)}
+
               <Grid container xs={12} spacing={3} alignItems={"flex-start"}>
                 <Grid item xs={4}>
                   <img className="poster" src={`${this.state.filmDetails.photo}`} alt={[this.state.filmDetails.name]} />
@@ -188,7 +203,7 @@ export default class FilmDetail extends React.Component {
                 <h2>Add new watch:</h2>
               </Grid>
               {user !== '' ? (
-                <Grid container xs={12} spacing={3}>
+                <Grid container xs={12} spacing={3} className={"new-watch"}>
                   <Grid item xs={4}>
                     <TextField variant="filled"
                       required
