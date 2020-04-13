@@ -5,8 +5,6 @@ import { Redirect } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
 
-// import * as constants from "../../constants";
-
 import "./log-in.scss";
 
 export default class LogIn extends React.Component {
@@ -43,7 +41,6 @@ export default class LogIn extends React.Component {
         if (this.state.username.length > 0) {
             // createUser();
             localStorage.setItem('username', this.state.username);
-            // console.log(localStorage.getItem('username'));
             this.setState({
                 redirect: true
             })

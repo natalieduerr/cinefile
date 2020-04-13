@@ -4,7 +4,6 @@ import Button from '@material-ui/core/Button';
 import { Link } from "react-router-dom";
 
 import Navigation from "../../components/navigation/Navigation";
-// import FilmListing from "../../components/film/FilmListing";
 
 import FilmCard from "../../components/film/FilmCard";
 
@@ -17,7 +16,6 @@ export default class Dashboard extends React.Component {
 
     componentDidMount() {
         this.getFilms();
-        console.log(this.state.films);
     }
 
     getFilms = _ => {
@@ -26,8 +24,6 @@ export default class Dashboard extends React.Component {
             .then(response => this.setState({ films: response.data[0] }))
             .catch(err => console.error(err))
     };
-
-
 
     render() {
         return (

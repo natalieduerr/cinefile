@@ -1,6 +1,5 @@
 import React from 'react';
 
-import ReactDOM from 'react-dom';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 
@@ -37,12 +36,9 @@ export default class Account extends React.Component {
 
     componentDidMount() {
         this.getWatched();
-        console.log(this.state.watcheds);
     }
 
     render() {
-        console.log(localStorage.getItem('username'));
-
         if ((localStorage.getItem('username') === "")) {
             this.setState({ redirect: true });
         };
