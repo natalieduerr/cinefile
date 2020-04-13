@@ -4,6 +4,11 @@
 -- ------------------------------------------------------
 -- Server version	8.0.19
 
+DROP DATABASE IF EXISTS films;
+CREATE DATABASE films;
+USE films;
+
+
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
@@ -117,11 +122,8 @@ CREATE TABLE `film` (
   KEY `genre` (`genre`),
   CONSTRAINT `film_ibfk_1` FOREIGN KEY (`director`) REFERENCES `director` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `film_ibfk_2` FOREIGN KEY (`genre`) REFERENCES `genre` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-<<<<<<< Updated upstream
 ) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-=======
-) ENGINE=InnoDB AUTO_INCREMENT=94 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
->>>>>>> Stashed changes
+
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -362,11 +364,10 @@ BEGIN
           ON film.director = director.id
 		  WHERE watched.user = uname
           AND director.gender = "F") AS bc; 
-	
-<<<<<<< Updated upstream
-    RETURN (count_women / count_movies * 100);
+    RETURN count_women;
 END ;;
 DELIMITER ;
+                                                                                  
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
@@ -385,9 +386,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `add_festival_for_film`(ffid INT,fil
 BEGIN
 	INSERT INTO debuted_at_festival(film,festival)
     VALUES (filmid,ffid);
-=======
-    RETURN count_women;
->>>>>>> Stashed changes
+
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -415,7 +414,6 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-<<<<<<< Updated upstream
 /*!50003 DROP PROCEDURE IF EXISTS `create_watched` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -429,7 +427,7 @@ DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `create_watched`(uname VARCHAR(45),fid INT,wdate DATE,wrate INT)
 BEGIN
 	INSERT INTO watched(user,date,rating,film)
-    VALUES ('uname','wdate',wrate,fid);
+    VALUES (uname,wdate,wrate,fid);
 END ;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -763,8 +761,7 @@ DELIMITER ;
 /*!50003 SET character_set_client  = @saved_cs_client */ ;
 /*!50003 SET character_set_results = @saved_cs_results */ ;
 /*!50003 SET collation_connection  = @saved_col_connection */ ;
-=======
->>>>>>> Stashed changes
+
 /*!50003 DROP PROCEDURE IF EXISTS `get_watched` */;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -801,13 +798,8 @@ DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `update_watched`(wid INT,wdate DATE,wrate INT)
 BEGIN
 	UPDATE watched
-<<<<<<< Updated upstream
-    SET date= 'wdate'
-    AND rate= wrate
-=======
     SET date = wdate,
 		rating = wrate
->>>>>>> Stashed changes
     WHERE id = wid;
 END ;;
 DELIMITER ;
@@ -847,8 +839,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
-<<<<<<< Updated upstream
--- Dump completed on 2020-04-12 15:18:27
-=======
 -- Dump completed on 2020-04-12 19:43:24
->>>>>>> Stashed changes
