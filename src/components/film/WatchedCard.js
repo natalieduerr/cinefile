@@ -67,7 +67,7 @@ export default class WatchedCard extends React.Component {
         <Grid container className="watched-card">
           <Grid container xs={8}>
             <Grid item xs={6}><h4>{this.props.watched.name}</h4></Grid>
-            {/* Making rating none if null */}
+            {(this.props.watched.rating === null) ? <Grid item xs={6}>No rating</Grid> : <Grid item xs={6}>Rating: {this.props.watched.rating}</Grid>}
             <Grid item xs={6}>Rating: {this.props.watched.rating}</Grid>
             <Grid item xs={12}>Date Watched: {dateFormat(this.props.watched.date, "longDate")}</Grid>
           </Grid>
@@ -83,7 +83,6 @@ export default class WatchedCard extends React.Component {
         <Grid container className="watched-card blue">
           <Grid container xs={8}>
             <Grid item xs={4}><h4>{this.props.watched.name}</h4></Grid>
-            {/* Making rating none if null */}
             <Grid item container direction={"row"} spacing={3} xs={8}>
               <Grid item xs={6}>
                 <TextField variant="filled"
@@ -125,7 +124,6 @@ export default class WatchedCard extends React.Component {
         <Grid container className="watched-card red">
           <Grid container xs={8}>
             <Grid item xs={6}><h4>{this.props.watched.name}</h4></Grid>
-            {/* Making rating none if null */}
             <Grid item xs={6}>Rating: {this.props.watched.rating}</Grid>
             <Grid item xs={12}>Date Watched: {dateFormat(this.props.watched.date, "longDate")}</Grid>
           </Grid>

@@ -2,7 +2,6 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 
 import Navigation from "../../components/navigation/Navigation";
-
 import FilmCard from "../../components/film/FilmCard";
 
 import "./explore.scss";

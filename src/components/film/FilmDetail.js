@@ -27,7 +27,12 @@ export default class FilmDetail extends React.Component {
     watched: [],
     watchedDate: new Date().toISOString().split('T')[0],
     rating: null,
-    success: false
+    success: false,
+    failure: false,
+    allFestivals: [],
+    selectedFestival:[],
+    addFestival: false,
+    addAward: false
   };
 
   componentDidMount() {
@@ -52,7 +57,15 @@ export default class FilmDetail extends React.Component {
           });
         }, 5000);
       })
-      .catch(err => console.error(err))
+      .catch(err => {
+        console.error(err);
+        this.setState({ failure: true });
+        setTimeout(() => {
+          this.setState({
+            failure: false
+          });
+        }, 7000);
+      })
   };
 
   handleChange = name => event => {
@@ -85,6 +98,13 @@ export default class FilmDetail extends React.Component {
       .catch(err => console.error(err))
   };
 
+  getAllFestivals = _ => {
+    fetch(`http://localhost:5000/festival/all`)
+    .then(response => response.json())
+      .then(response => this.setState({ allFestivals: response.data[0] }))
+      .catch(err => console.error(err))
+  }
+
   getAwards = _ => {
     fetch(`http://localhost:5000/film/${this.props.location.state.filmId}/awards`)
       .then(response => response.json())
@@ -92,12 +112,16 @@ export default class FilmDetail extends React.Component {
       .catch(err => console.error(err))
   };
 
-
   getWatched = _ => {
     fetch(`http://localhost:5000/film/watched/${localStorage.getItem('username')}/${this.props.location.state.filmId}/`)
       .then(response => response.json())
       .then(response => this.setState({ watched: response.data[0] }))
       .catch(err => console.error(err))
+  };
+
+  toAddFestival = event => {
+    this.getAllFestivals();
+    this.setState({ addFestival: true });
   };
 
   render() {
@@ -169,6 +193,8 @@ export default class FilmDetail extends React.Component {
     else {
       return (
         <div className="App">
+          {this.state.success ? <div className="success-pop-up">Successfully added!</div> : (null)}
+          {this.state.failure ? <div className="fail-pop-up">Error! Something went wrong, this film was not updated</div> : (null)}
           <Grid container spacing={3}>
             <Navigation activeTab={''} />
             <Grid container
@@ -176,16 +202,13 @@ export default class FilmDetail extends React.Component {
               spacing={3}
               alignItems={'center'}
               className={"film-detail"}>
-
-              {this.state.success ? <div className="success-pop-up">Successfully added!</div> : (null)}
-
               <Grid container xs={12} spacing={3} alignItems={"flex-start"}>
                 <Grid item xs={4}>
                   <img className="poster" src={`${this.state.filmDetails.photo}`} alt={[this.state.filmDetails.name]} />
                 </Grid>
                 <Grid item xs={8}>
                   <h1>{this.state.filmDetails.name}</h1>
-                  <p><b>Director:</b> <span onClick={() => this.setState({ redirect: true })}>{this.state.director.name}</span></p>
+                  <p><b>Director:</b> <span className="director-link" onClick={() => this.setState({ redirect: true })}>{this.state.director.name}</span></p>
                   <p><b>Genre:</b> {this.state.filmDetails.genre}</p>
                   <p><b>Runtime:</b> {this.state.filmDetails.runtime} minutes</p>
                   <p><b>Date Released:</b> {dateFormat(this.state.filmDetails.date_released, "longDate")}</p>
@@ -194,6 +217,25 @@ export default class FilmDetail extends React.Component {
               </Grid>
 
               <ShowFestival />
+              {this.state.addFestival ?
+                <Grid container>
+                  <TextField variant="filled"
+                  required
+                  select
+                  fullWidth
+                  label="Film Festivals"
+                  value={this.state.selectedFestival}
+                  onChange={this.handleChange('selectedFestival')}
+                >
+                  {this.state.allFestivals.map((allFestivals) => (
+                    <MenuItem key={allFestivals.id} value={allFestivals.id}>
+                      {allFestivals.name}
+                    </MenuItem>
+                  ))}
+                </TextField>
+                <Button>Save</Button>
+                </Grid> : null}
+              <Button color={'secondary'} onClick={this.toAddFestival}> + Add Festival Debut</Button>
               <ShowAwards />
               <Grid item xs={12}>
                 <h2>You watched:</h2>

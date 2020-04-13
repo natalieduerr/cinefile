@@ -1,10 +1,11 @@
+@import '../styles.scss';
+
 .form {
     .MuiFormControl-root {
         display: block;
     }
 
     .MuiInputBase-root {
-        // width: 60%;
         margin-bottom: 24px;
     }
 }

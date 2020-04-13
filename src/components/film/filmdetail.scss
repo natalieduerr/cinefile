@@ -1,17 +1,8 @@
+@import '../styles.scss';
+
 .film-detail {
     margin-top: 2rem !important;
     padding-left: 1rem !important;
-
-    .success-pop-up {
-        position: fixed;
-        bottom: 40px;
-        color: white;
-        background-color: green;
-        padding: 20px;
-        left: 50%;
-        border-radius: .5rem;
-        z-index: 9999999;
-    }
 
     .poster {
         width: 100%;
@@ -31,5 +22,11 @@
 
     .new-watch {
         margin-bottom: 5rem;
+    }
+    
+    .director-link {
+        color: #2196f3;
+        text-decoration: underline;
+        cursor: pointer;
     }
 }

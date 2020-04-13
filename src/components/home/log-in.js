@@ -1,7 +1,8 @@
 import React from 'react';
+import { Redirect } from "react-router-dom";
+
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import { Redirect } from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
 
 import "./log-in.scss";
