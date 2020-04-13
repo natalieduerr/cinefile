@@ -820,8 +820,10 @@ DELIMITER ;
 DELIMITER ;;
 CREATE DEFINER=`root`@`localhost` PROCEDURE `user_has_watched_film`(uname VARCHAR(45),fid INT)
 BEGIN
-	SELECT film.name, watched.date, watched.rating
+	SELECT watched.id, film.name, watched.date, watched.rating
     FROM watched
+    INNER JOIN film
+    ON film.id = watched.film
     WHERE watched.user = uname
     AND watched.film = fid;
 END ;;

@@ -242,7 +242,8 @@ app.get("/director/:id/director", function (req, res) {
   })
 });
 
-// Watched
+//////////////////////// Watched ////////////////////////
+// Creates new watched film for specified user, film, date, rating
 app.get("/watched/create", (req, res) => {
   const {user_id, name, date, rating} = req.query;
   const create_watched = `CALL create_watched('${user_id}', ${name}, '${date}', ${rating})`;
@@ -259,6 +260,7 @@ app.get("/watched/create", (req, res) => {
   })
 });
 
+// Get all watched films for specified user
 app.get("/watched/:id", function (req, res) {
   const id = req.params.id;
   const get_watched = `CALL get_watched('${id}');`;
@@ -274,6 +276,23 @@ app.get("/watched/:id", function (req, res) {
   })
 });
 
+// Gets number of watched films
+app.get("/watched/:id/count", function (req, res) {
+  const id = req.params.id;
+  const get_count = `select count_watched('${id}');`;
+  
+  con.query(get_count, (err, results) => {
+    if (err) {
+      return res.send(err)
+    } else {
+      return res.json({
+        data:results
+      })
+    }
+  })
+});
+
+// Gets number of watched films directed by women
 app.get("/watched/:id/women", function (req, res) {
   const id = req.params.id;
   const get_women_directed = `select women_directed('${id}');`;
@@ -284,6 +303,39 @@ app.get("/watched/:id/women", function (req, res) {
     } else {
       return res.json({
         data:results
+      })
+    }
+  })
+});
+
+app.get("/watched/:id/bechdol", function (req, res) {
+  const id = req.params.id;
+  const get_bechdol = `select BCD_percent('${id}');`;
+  
+  con.query(get_bechdol, (err, results) => {
+    if (err) {
+      return res.send(err)
+    } else {
+      return res.json({
+        data:results
+      })
+    }
+  })
+});
+
+// Not working pls kill me
+// Gets specified users watched entries for specified film 
+app.get("/watched/user", function (req, res) {
+  const {id, fid} = req.query;
+  const get_watched = `CALL user_has_watched_film('natalie', 89);`;
+
+  con.query(get_watched, (err, results, fields) => {
+    if (err) {
+      return res.send(err)
+    } else {
+      return res.json({
+        message: 'hello',
+        data: results
       })
     }
   })

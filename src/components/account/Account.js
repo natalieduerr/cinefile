@@ -19,7 +19,10 @@ var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 export default class Account extends React.Component {
     state = {
         watcheds: [],
-        redirect: false
+        redirect: false,
+        countWatched: '',
+        women: '',
+        bechdol: ''
     };
 
     backHome() {
@@ -33,9 +36,33 @@ export default class Account extends React.Component {
             .catch(err => console.error(err))
     };
 
+    getCountWatched = _ => {
+        fetch(`http://localhost:5000/watched/${localStorage.getItem('username')}/count`)
+        .then(response => response.json())
+            .then(response => this.setState({ countWatched: response.data[0]["count_watched('"+localStorage.getItem('username')+"')"]}))
+            .catch(err => console.error(err))
+    };
+
+    getWomenDirected = _ => {
+        fetch(`http://localhost:5000/watched/${localStorage.getItem('username')}/women`)
+        .then(response => response.json())
+            .then(response => this.setState({ women: response.data[0]["women_directed('"+localStorage.getItem('username')+"')"]}))
+            .catch(err => console.error(err))
+    };
+
+    getBechdol = _ => {
+        fetch(`http://localhost:5000/watched/${localStorage.getItem('username')}/bechdol`)
+        .then(response => response.json())
+            .then(response => this.setState({ bechdol: response.data[0]["BCD_percent('"+localStorage.getItem('username')+"')"]}))
+            .catch(err => console.error(err))
+    };
+
 
     componentDidMount() {
         this.getWatched();
+        this.getWomenDirected();
+        this.getCountWatched();
+        this.getBechdol();
     }
 
     render() {
@@ -61,8 +88,8 @@ export default class Account extends React.Component {
                     indexLabelFontFamily: 'Work Sans',
                     type: "pie",
                     dataPoints: [
-                        { y: 100, label: "By women", color: "#6157A6" },
-                        { y: 64, label: "Not by women", color: "#40e0d0" }
+                        { y: [this.state.women], label: "By women", color: "#6157A6" },
+                        { y: [this.state.countWatched], label: "Not by women", color: "#40e0d0" }
                     ]
                 }]
             }
@@ -78,8 +105,8 @@ export default class Account extends React.Component {
                     indexLabelFontFamily: 'Work Sans',
                     type: "pie",
                     dataPoints: [
-                        { y: 100, label: "Pass", color: "#40e0d0" },
-                        { y: 64, label: "Does not pass", color: "#FEEA19" }
+                        { y: [this.state.bechdol], label: "Pass", color: "#40e0d0" },
+                        { y: [this.state.countWatched], label: "Does not pass", color: "#FEEA19" }
                     ]
                 }]
             }

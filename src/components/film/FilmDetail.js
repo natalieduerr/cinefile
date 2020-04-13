@@ -11,6 +11,9 @@ import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem/MenuItem";
 import Button from '@material-ui/core/Button';
 
+import { transitions, positions, Provider as AlertProvider } from 'react-alert'
+import AlertTemplate from 'react-alert-template-basic'
+
 import WatchedCard from "../../components/film/WatchedCard"
 
 import "./filmdetail.scss";
@@ -26,14 +29,16 @@ export default class FilmDetail extends React.Component {
     redirect: false,
     watched: [],
     watchedDate: new Date().toISOString().split('T')[0],
-    rating: ''
+    rating: '',
+    success: false
   };
 
   componentDidMount() {
     this.getFilmDetails();
     this.getDirector();
     this.getFestivals();
-    this.getAwards()
+    this.getAwards();
+    this.getWatched();
   }
 
   createWatched = () => {
@@ -41,9 +46,14 @@ export default class FilmDetail extends React.Component {
       .then(response => response.json())
       .then(response => {
         console.log(response);
-        // Success message, clear state for date and rating
-        this.setState({rating: ''});
-        this.setState({watchedDate: new Date().toISOString().split('T')[0] });
+        this.setState({ rating: '' });
+        this.setState({ watchedDate: new Date().toISOString().split('T')[0] });
+        this.setState({ success: true });
+        setTimeout(() => {
+          this.setState({
+            success: false
+          });
+        }, 5000);
       })
       .catch(err => console.error(err))
   };
@@ -86,13 +96,21 @@ export default class FilmDetail extends React.Component {
       .catch(err => console.error(err))
   };
 
+  getWatched = _ => {
+    fetch(`http://localhost:5000/watched/user?id=${localStorage.getItem('username')}&fid=${this.props.location.state.filmId}`)
+    .then(response => response.json())
+    .then(response => console.log(response.data))
+    // .then(response => this.setState({ watched: response.data }))
+    .catch(err => console.error(err))
+  }
+
   render() {
     const festivalList = this.state.festivals;
     const awardList = this.state.awards;
     const watched = this.state.watched;
     const user = localStorage.getItem('username');
 
-    let watchedDate = this.state.watchedDate;
+    // let watchedDate = this.state.watchedDate;
 
     function ShowFestival() {
       if (festivalList.length !== 0) {
@@ -132,14 +150,14 @@ export default class FilmDetail extends React.Component {
           <h4>Log-in to see watched films</h4>
         </Grid>
       }
-      // else if (watched.length !== 0) {
-      //   return <Grid item xs={12}>
-      //     <h2>Awards Won:</h2>
-      //     {watched.map(watched => (
-      //       <WatchedCard key={watched.id} film={watched} />
-      //     ))}
-      //   </Grid>
-      // }
+      else if (watched.length !== 0) {
+        return <Grid item xs={12}>
+          <h2>Watched on:</h2>
+          {watched.map(watched => (
+            <WatchedCard key={watched.id} film={watched} />
+          ))}
+        </Grid>
+      }
       else {
         return <Grid item xs={12}>
           <h4>You haven't seen this film</h4>
@@ -164,6 +182,9 @@ export default class FilmDetail extends React.Component {
               spacing={3}
               alignItems={'center'}
               className={"film-detail"}>
+
+              {this.state.success ? <div className="success-pop-up">Successfully added!</div> : (null)}
+
               <Grid container xs={12} spacing={3} alignItems={"flex-start"}>
                 <Grid item xs={4}>
                   <img className="poster" src={`${this.state.filmDetails.photo}`} alt={[this.state.filmDetails.name]} />
@@ -188,7 +209,7 @@ export default class FilmDetail extends React.Component {
                 <h2>Add new watch:</h2>
               </Grid>
               {user !== '' ? (
-                <Grid container xs={12} spacing={3}>
+                <Grid container xs={12} spacing={3} className={"new-watch"}>
                   <Grid item xs={4}>
                     <TextField variant="filled"
                       required
