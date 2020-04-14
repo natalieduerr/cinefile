@@ -21,7 +21,8 @@ Contains the code to connect to the local instance of the database and all API c
 ## What to know before running
 1. If you don't already have it, [install npm](https://www.npmjs.com/get-npm).
    * You can check if you have npm on your machine by running `npm -v` in Terminal
-2. Our application is NOT responsive, please run on a 1024px screen or larger
+2. Install MySQL if you don't already have it, find instructions [here](https://dev.mysql.com/downloads/mysql/)
+3. Our application is NOT responsive, please run on a 1024px screen or larger
 
 
 ## How to install
