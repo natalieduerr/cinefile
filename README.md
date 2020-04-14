@@ -1,10 +1,28 @@
 # Cinefile
 An app to locally store films that you have watched
 
+## File structure
+### node_modules
+Contains the React dependencies we used to build Cinefile.
+
+### public
+Contains static assets (ex. images) used on the front-end.
+
+### src 
+Contains React components and files used to build the site.
+
+### sql
+Contains dump of our database.
+
+### `index.js`
+Contains the code to connect to the local instance of the database and all API calls that the front-end utilizes. 
+
+
 ## What to know before running
 1. If you don't already have it, [install npm](https://www.npmjs.com/get-npm).
    * You can check if you have npm on your machine by running `npm -v`
 2. Our application is NOT responsive, please run on a 1024px screen or larger
+
 
 ## How to install
 1. Open films.sql and run it!
