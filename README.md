@@ -3,7 +3,7 @@ An app to locally store films that you have watched
 
 ## What to know before running
 1. If you don't already have it, [install npm](https://www.npmjs.com/get-npm).
-⋅⋅⋅You can check if you have npm on your machine by running `npm -v`
+   * You can check if you have npm on your machine by running `npm -v`
 2. Our application is NOT responsive, please run on a 1024px screen or larger
 
 ## How to install
