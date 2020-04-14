@@ -14,7 +14,8 @@ export default class WatchedCard extends React.Component {
     mode: "view",
     id: this.props.watched.id,
     rating: this.props.watched.rating,
-    watchedDate: (dateFormat(this.props.watched.date, "isoDate"))
+    watchedDate: (dateFormat(this.props.watched.date, "isoDate")),
+    update: false,
   }
 
   handleChange = name => event => {
@@ -48,6 +49,10 @@ export default class WatchedCard extends React.Component {
       .then(response => response.json())
       .then(response => {
         this.setState({ mode: "view" });
+        this.setState({ update: true });
+        this.props.callbackFromParent(this.state.update);
+        this.setState({ update: false });
+        this.props.callbackFromParent(this.state.update);
       })
       .catch(err => console.error(err))
   };
@@ -57,6 +62,10 @@ export default class WatchedCard extends React.Component {
       .then(response => response.json())
       .then(response => {
         this.setState({ mode: "view" });
+        this.setState({ update: true });
+        this.props.callbackFromParent(this.state.update);
+        this.setState({ update: false });
+        this.props.callbackFromParent(this.state.update);
       })
       .catch(err => console.error(err))
   };
@@ -68,7 +77,6 @@ export default class WatchedCard extends React.Component {
           <Grid container xs={8}>
             <Grid item xs={6}><h4>{this.props.watched.name}</h4></Grid>
             {(this.props.watched.rating === null) ? <Grid item xs={6}>No rating</Grid> : <Grid item xs={6}>Rating: {this.props.watched.rating}</Grid>}
-            <Grid item xs={6}>Rating: {this.props.watched.rating}</Grid>
             <Grid item xs={12}>Date Watched: {dateFormat(this.props.watched.date, "longDate")}</Grid>
           </Grid>
           <Grid container xs={4} className="buttons" justify={"flex-end"}>

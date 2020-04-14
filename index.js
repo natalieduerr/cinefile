@@ -140,6 +140,24 @@ app.get("/film/create/:name/:released/:bechdel/:runtime/:rating/:imagePath/:dire
   })
 });
 
+// Adds specified festival to specified film
+app.get("/film/addfest/:fid/:festival", function (req, res) {
+  const fid = req.params.fid;
+  const festival = req.params.festival;
+
+  const add_festival_for_film = `CALL add_festival_for_film(${festival}, ${fid});`;
+  con.query(add_festival_for_film, (err, results) => {
+    if (err) {
+      return res.send(err)
+    } else {
+      return res.json({
+        message: 'Successfully added festival.',
+        data: results
+      })
+    }
+  })
+});
+
 //////////////////////// Awards ////////////////////////
 // Gets films that have won specified award
 app.get("/award/:id/films", function (req, res) {
@@ -403,6 +421,23 @@ app.get("/watched/delete/:wid", function (req, res) {
   })
 });
 
+// Deletes all watched entries for specified user
+app.get("/delete/:id", function (req, res) {
+  const id = req.params.id;
+  const delete_user = `CALL delete_user('${id}');`
+
+  con.query(delete_user, (err, results) => {
+    if (err) {
+      return res.send(err)
+    } else {
+      return res.json({
+        message: 'Successfully deleted user.',
+        data:results
+      })
+    }
+  })
+});
+
 // Get number of films rated NUM by specified user
 app.get("/watched/:id/:num", function (req, res) {
   const id = req.params.id;
@@ -422,5 +457,5 @@ app.get("/watched/:id/:num", function (req, res) {
 
 
 app.listen(5000, () => {
-  console.log("Terror from the Year 5000 connected");
+  console.log("Terror from the Port :5000 connected");
 });
