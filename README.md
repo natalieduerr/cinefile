@@ -37,4 +37,4 @@ Contains the code to connect to the local instance of the database and all API c
 5. In a new tab of terminal, navigate to the root again and now run `npm start`
 6. This should happen automatically, but if not, navigate to `localhost:3000` on your web browser to access Cinefile
 
-####Any questions? Reach out to duerr.n@husky.neu.edu 
+#### Any questions? Reach out to duerr.n@husky.neu.edu 
