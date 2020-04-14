@@ -28,6 +28,7 @@ export default class Account extends React.Component {
         rating3: '',
         rating4: '',
         rating5: '',
+        deleteUser: false
     };
 
     backHome() {
@@ -80,6 +81,37 @@ export default class Account extends React.Component {
         this.get(4);
         this.get(5);
     }
+
+    myCallback = (dataFromChild) => {
+        if (dataFromChild === true) {
+            this.getWatched();
+            this.getWomenDirected();
+            this.getCountWatched();
+            this.getBechdol();
+            this.get(1);
+            this.get(2);
+            this.get(3);
+            this.get(4);
+            this.get(5);
+        }
+    };
+
+    toConfirmDelete = event => {
+        this.setState({ deleteUser: true })
+    }
+
+    toCancel = event => {
+        this.setState({ deleteUser: false })
+    }
+
+    deleteUser = () => {
+        fetch(`http://localhost:5000/delete/${localStorage.getItem('username')}`)
+          .then(response => response.json())
+          .then(response => {
+            this.setState({ redirect: true });
+          })
+          .catch(err => console.error(err))
+      };
 
     render() {
         if ((localStorage.getItem('username') === "")) {
@@ -196,7 +228,7 @@ export default class Account extends React.Component {
                                 <Grid container xs={12}>
                                     <h2 className="watched">Watched films</h2>
                                     {this.state.watcheds.map(watched => (
-                                        <WatchedCard key={watched.id} watched={watched} />
+                                        <WatchedCard callbackFromParent={this.myCallback} key={watched.id} watched={watched} />
                                     ))}
                                 </Grid> :
                                 <Grid container xs={12}>
@@ -204,9 +236,12 @@ export default class Account extends React.Component {
                                     <Grid item xs={12}><h4>You haven't watched any films yet!</h4></Grid>
                                 </Grid>
                             }
-                            <Button className="delete" variant="contained" color="primary">
-                                Delete account
-                            </Button>
+                            <Grid container xs={12} className={'delete'}>
+                                {(this.state.deleteUser === false) ? <Button className="delete" variant="contained" color="primary" onClick={this.toConfirmDelete}>
+                                    Delete account
+                            </Button> : <div><p><b>By deleteing your account, your watch history will also be deleted. Data is not recoverable</b></p>
+                                        <Button color="primary" onClick={this.toCancel}>Cancel</Button><Button color="secondary" onClick={this.deleteUser}>Yes, delete account</Button> </div>}
+                            </Grid>
                         </Grid>
                     </Grid>
                 </div>

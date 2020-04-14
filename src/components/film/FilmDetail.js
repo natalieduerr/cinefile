@@ -30,7 +30,7 @@ export default class FilmDetail extends React.Component {
     success: false,
     failure: false,
     allFestivals: [],
-    selectedFestival:[],
+    selectedFestival: [],
     addFestival: false,
     addAward: false
   };
@@ -41,6 +41,7 @@ export default class FilmDetail extends React.Component {
     this.getFestivals();
     this.getAwards();
     this.getWatched();
+    this.getAllFestivals();
   }
 
   createWatched = () => {
@@ -50,6 +51,7 @@ export default class FilmDetail extends React.Component {
         console.log(response);
         this.setState({ rating: '' });
         this.setState({ watchedDate: new Date().toISOString().split('T')[0] });
+        this.getWatched();
         this.setState({ success: true });
         setTimeout(() => {
           this.setState({
@@ -100,7 +102,7 @@ export default class FilmDetail extends React.Component {
 
   getAllFestivals = _ => {
     fetch(`http://localhost:5000/festival/all`)
-    .then(response => response.json())
+      .then(response => response.json())
       .then(response => this.setState({ allFestivals: response.data[0] }))
       .catch(err => console.error(err))
   }
@@ -119,10 +121,29 @@ export default class FilmDetail extends React.Component {
       .catch(err => console.error(err))
   };
 
+  addFestivalForFilm = _ => {
+    fetch(`http://localhost:5000/film/addfest/${this.props.location.state.filmId}/${this.state.selectedFestival}`)
+      .then(response => response.json())
+      .then(this.setState({ addFestival: false }))
+      .then(this.getFestivals())
+      .then(this.setState({ selectedFestival: [] }))
+      .catch(err => console.error(err))
+  };
+
   toAddFestival = event => {
-    this.getAllFestivals();
     this.setState({ addFestival: true });
   };
+
+  cancel = event => {
+    this.setState({ addFestival: false });
+  };
+
+  myCallback = (dataFromChild) => {
+    if (dataFromChild === true) {
+      this.getWatched()
+    }
+  };
+
 
   render() {
     const festivalList = this.state.festivals;
@@ -172,7 +193,7 @@ export default class FilmDetail extends React.Component {
       else if (watched.length !== 0) {
         return <Grid item xs={12}>
           {self.state.watched.map(watched => (
-            <WatchedCard key={watched.id} watched={watched} />
+            <WatchedCard callbackFromParent={self.myCallback} key={watched.id} watched={watched} />
           ))}
         </Grid>
       }
@@ -218,24 +239,29 @@ export default class FilmDetail extends React.Component {
 
               <ShowFestival />
               {this.state.addFestival ?
-                <Grid container>
-                  <TextField variant="filled"
-                  required
-                  select
-                  fullWidth
-                  label="Film Festivals"
-                  value={this.state.selectedFestival}
-                  onChange={this.handleChange('selectedFestival')}
-                >
-                  {this.state.allFestivals.map((allFestivals) => (
-                    <MenuItem key={allFestivals.id} value={allFestivals.id}>
-                      {allFestivals.name}
-                    </MenuItem>
-                  ))}
-                </TextField>
-                <Button>Save</Button>
-                </Grid> : null}
-              <Button color={'secondary'} onClick={this.toAddFestival}> + Add Festival Debut</Button>
+                <Grid container xs={12} spacing={3} alignItems={"center"}>
+                  <Grid item xs={9}>
+                    <TextField variant="filled"
+                      required
+                      select
+                      fullWidth
+                      label="Film Festivals"
+                      value={this.state.selectedFestival}
+                      onChange={this.handleChange('selectedFestival')}
+                    >
+                      {this.state.allFestivals.map((allFestivals) => (
+                        <MenuItem key={allFestivals.id} value={allFestivals.id}>
+                          {allFestivals.name}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </Grid>
+                  <Grid item xs={3}>
+                    {/* <Button color={'secondary'} variant={'contained'}  onClick={this.addFestivalToFilm()} disabled={(this.state.selectedFestival.length === 0)}>Save</Button> */}
+                    <Button color={'secondary'} variant={'contained'} onClick={this.addFestivalForFilm} disabled={(this.state.selectedFestival.length === 0)}>Save</Button>
+                    <Button onClick={this.cancel} className={'cancel'}>Cancel</Button>
+                  </Grid>
+                </Grid> : <Button color={'secondary'} onClick={this.toAddFestival} > + Add Festival Debut</Button>}
               <ShowAwards />
               <Grid item xs={12}>
                 <h2>You watched:</h2>
