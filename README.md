@@ -36,3 +36,5 @@ Contains the code to connect to the local instance of the database and all API c
    * If you get the error: `command does not found: nodemon`, run this command: `sudo npm install -g nodemon` and enter your computer password to install nodemon. More information about nodemon can be found [here](https://www.npmjs.com/package/nodemon)
 5. In a new tab of terminal, navigate to the root again and now run `npm start`
 6. This should happen automatically, but if not, navigate to `localhost:3000` on your web browser to access Cinefile
+
+####Any questions? Reach out to duerr.n@husky.neu.edu 
